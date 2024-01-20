@@ -5,7 +5,9 @@ export default function BlogList() {
     <div>
       <BlogListToolbar />
       <OnePageBlogs />
-      <BlogListPagination />
+      <div className='py-4'>
+        <BlogListPagination />
+      </div>
     </div>
   );
 }

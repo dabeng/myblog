@@ -1,3 +1,4 @@
+import { Link } from "react-router-dom";
 import classNames from 'classnames';
 
 const blogs = [
@@ -46,6 +47,20 @@ export default function OnePageBlogs() {
           {blog.subtitle}
         </p>
       </section>
+      <footer className='is-flex is-justify-content-flex-end'>
+        <Link to="edit" className="button is-small is-info mr-4">
+          <span className="icon">
+          <i className="fa-solid fa-pencil"></i>
+          </span>
+          <span>Edit</span>
+        </Link>
+        <button className="button is-small is-danger is-outlined">
+          <span className="icon">
+            <i className="fa-solid fa-trash-can"></i>
+          </span>
+          <span>Delete</span>
+        </button>
+      </footer>
     </article>
   ));
 
