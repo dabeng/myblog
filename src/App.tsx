@@ -7,6 +7,7 @@ import NotFound from './pages/Common/NotFound';
 import BlogsRoutes from './modules/Blogs/Blogs.routes';
 
 import 'bulma/css/bulma.min.css';
+import '@fortawesome/fontawesome-free/css/all.min.css';
 import './style.scss';
 
 export function App() {

@@ -1,8 +1,9 @@
-import { BlogListPagination, OnePageBlogs } from '../../modules/Blogs';
+import { BlogListToolbar, BlogListPagination, OnePageBlogs } from '../../modules/Blogs';
 
 export default function BlogList() {
   return (
-    <div className="is-flex-direction-column">
+    <div>
+      <BlogListToolbar />
       <OnePageBlogs />
       <BlogListPagination />
     </div>
