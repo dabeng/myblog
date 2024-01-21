@@ -8,6 +8,8 @@
     "@types/react-dom": "18.2.18",
     "bulma": "^0.9.4",
     "classnames": "^2.5.1",
+    "dexie": "^3.2.4",
+    "dexie-react-hooks": "^1.1.7",
     "react": "18.2.0",
     "react-dom": "18.2.0",
     "react-hook-form": "^7.49.3",
