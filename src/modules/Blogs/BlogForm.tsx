@@ -1,6 +1,13 @@
+import { useNavigate } from "react-router-dom";
 import { useForm } from 'react-hook-form';
+import { db } from "../../shared/db";
 
-export default function BlogForm() {
+type BlogProps = {
+  id?: number;
+};
+
+export default function BlogForm(props: BlogProps) {
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
@@ -9,7 +16,25 @@ export default function BlogForm() {
     formState: { errors },
   } = useForm();
 
-  const onSubmit = (data) => console.log(data);
+  const addBlog = async (data) => {
+    try {
+      // TODO：add author
+      data.publishedDate = (new Date()).toLocaleDateString('zh-Hans-CN');
+      const id = await db.blogs.add(data);
+      navigate('/blogs');
+    } catch (error) {
+      // setStatus(`Failed to add ${name}: ${error}`);
+      var a =1;
+    }
+  }
+
+  const onSubmit = (data) => {
+    if (!props.id) {
+      addBlog(data);
+    } else {
+      
+    }
+  };
   const resetForm = () => {
     reset();
   };
