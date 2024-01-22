@@ -4,6 +4,10 @@ import { db } from "../../shared/db";
 
 type BlogProps = {
   id?: number;
+  title?: string;
+  subtitle?: string;
+  publishedDate?: string;
+  updatedDate?: string;
 };
 
 export default function BlogForm(props: BlogProps) {
@@ -19,7 +23,7 @@ export default function BlogForm(props: BlogProps) {
   const addBlog = async (data) => {
     try {
       // TODO：add author
-      data.publishedDate = (new Date()).toLocaleDateString('zh-Hans-CN');
+      data.publishedDate = new Date();
       const id = await db.blogs.add(data);
       navigate('/blogs');
     } catch (error) {
@@ -39,7 +43,7 @@ export default function BlogForm(props: BlogProps) {
     reset();
   };
 
-  console.log(watch('example')); // watch input value by passing the name of it
+  //console.log(watch('example')); // watch input value by passing the name of it
 
   return (
     /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
