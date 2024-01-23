@@ -3,8 +3,6 @@ import classNames from 'classnames';
 import { db } from '../../shared/db';
 import { useLiveQuery } from 'dexie-react-hooks';
 
-
-
 export default function OnePageBlogs() {
 
   const blogs = useLiveQuery(
@@ -25,11 +23,11 @@ export default function OnePageBlogs() {
         >
           <header>
             <span className="has-text-grey is-uppercase is-size-7 has-text-weight-bold mr-4">
-              Published:<time>08.12.2014</time>
+              Published: <time>{(new Date(blog.publishedDate)).toLocaleDateString('zh-Hans-CN')}</time>
             </span>
-            <span className="has-text-grey is-uppercase is-size-7 has-text-weight-bold">
-              Last updated:<time>08.12.2014</time>
-            </span>
+            {blog.updatedDate && <span className="has-text-grey is-uppercase is-size-7 has-text-weight-bold">
+              Last updated: <time>{(new Date(blog.updatedDate)).toLocaleDateString('zh-Hans-CN')}</time>
+            </span>}
           </header>
           <section>
             <p className="title is-4 py-2">
@@ -40,7 +38,7 @@ export default function OnePageBlogs() {
             </p>
           </section>
           <footer className='is-flex is-justify-content-flex-end'>
-            <Link to="edit" className="button is-small is-info mr-4">
+            <Link to={`/blogs/edit/${blog.id}`} className="button is-small is-info mr-4">
               <span className="icon">
                 <i className="fa-solid fa-pencil"></i>
               </span>

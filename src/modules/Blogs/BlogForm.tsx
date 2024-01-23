@@ -1,45 +1,71 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from 'react-hook-form';
 import { db } from "../../shared/db";
+import { useLiveQuery } from 'dexie-react-hooks';
 
-type BlogProps = {
-  id?: number;
-};
 
-export default function BlogForm(props: BlogProps) {
+export default function BlogForm() {
+  const { id } = useParams();
   const navigate = useNavigate();
+
+  const getBlogById = async () => {
+    return await db.blogs
+      .where('id')
+      .equals(Number.parseInt(id))
+      .first();
+  };
+
+
   const {
     register,
     handleSubmit,
     reset,
     watch,
-    formState: { errors },
-  } = useForm();
+    formState: { dirtyFields, errors },
+  } = useForm({
+    defaultValues: getBlogById
+  });
 
   const addBlog = async (data) => {
     try {
       // TODO：add author
-      data.publishedDate = (new Date()).toLocaleDateString('zh-Hans-CN');
+      data.publishedDate = new Date();
       const id = await db.blogs.add(data);
       navigate('/blogs');
     } catch (error) {
-      // setStatus(`Failed to add ${name}: ${error}`);
-      var a =1;
+      // TODO: output error message
+    }
+  }
+
+  const updateBlog = async (data) => {
+    try {
+      if (Object.keys(dirtyFields).length === 0) {
+        return;
+      }
+      const updatedData = {};
+      for (const key of Object.keys(dirtyFields)) {
+        updatedData[key] = data[key];
+      }
+      updatedData['updatedDate'] = new Date();
+      await db.blogs.put({id: Number.parseInt(id), ...updatedData});
+      navigate('/blogs');
+    } catch (error) {
+      // TODO: output error message
     }
   }
 
   const onSubmit = (data) => {
-    if (!props.id) {
+    if (!id) {
       addBlog(data);
     } else {
-      
+      updateBlog(data);
     }
   };
   const resetForm = () => {
     reset();
   };
 
-  console.log(watch('example')); // watch input value by passing the name of it
+  //console.log(watch('example')); // watch input value by passing the name of it
 
   return (
     /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
