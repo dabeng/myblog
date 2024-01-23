@@ -3,6 +3,16 @@ import { useForm } from 'react-hook-form';
 import { db } from "../../shared/db";
 import { useLiveQuery } from 'dexie-react-hooks';
 
+<<<<<<< main
+=======
+type BlogProps = {
+  id?: number;
+  title?: string;
+  subtitle?: string;
+  publishedDate?: string;
+  updatedDate?: string;
+};
+>>>>>>> 93a4ae830afaa6770792350534a9dafb9b497310
 
 export default function BlogForm() {
   const { id } = useParams();
