@@ -10,6 +10,14 @@ export default function OnePageBlogs() {
       .toArray()
   );
 
+  const deleteBlog = async (id) => {
+    try {
+      await db.blogs.delete(id);
+    } catch (error) {
+      // TODO: output error message
+    }
+  };
+
   return <>
     {blogs &&
       blogs.map((blog, index) => (
@@ -44,7 +52,7 @@ export default function OnePageBlogs() {
               </span>
               <span>Edit</span>
             </Link>
-            <button className="button is-small is-danger is-outlined">
+            <button className="button is-small is-danger is-outlined" onClick={() => deleteBlog(blog.id)}>
               <span className="icon">
                 <i className="fa-solid fa-trash-can"></i>
               </span>

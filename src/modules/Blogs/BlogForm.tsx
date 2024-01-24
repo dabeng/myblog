@@ -34,7 +34,7 @@ export default function BlogForm() {
     } catch (error) {
       // TODO: output error message
     }
-  }
+  };
 
   const updateBlog = async (data) => {
     try {
@@ -46,12 +46,12 @@ export default function BlogForm() {
         updatedData[key] = data[key];
       }
       updatedData['updatedDate'] = new Date();
-      await db.blogs.put({id: Number.parseInt(id), ...updatedData});
+      await db.blogs.update(Number.parseInt(id),{...updatedData});
       navigate('/blogs');
     } catch (error) {
       // TODO: output error message
     }
-  }
+  };
 
   const onSubmit = (data) => {
     if (!id) {
