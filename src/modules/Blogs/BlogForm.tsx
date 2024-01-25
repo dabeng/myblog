@@ -1,19 +1,19 @@
 import { useNavigate, useParams } from "react-router-dom";
 import { useForm } from 'react-hook-form';
 import { db } from "../../shared/db";
-import { useLiveQuery } from 'dexie-react-hooks';
 
 export default function BlogForm() {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const getBlogById = async () => {
-    return await db.blogs
-      .where('id')
-      .equals(Number.parseInt(id))
-      .first();
+    return id ?
+      await db.blogs
+        .where('id')
+        .equals(Number.parseInt(id))
+        .first()
+      : null;
   };
-
 
   const {
     register,
@@ -46,7 +46,7 @@ export default function BlogForm() {
         updatedData[key] = data[key];
       }
       updatedData['updatedDate'] = new Date();
-      await db.blogs.update(Number.parseInt(id),{...updatedData});
+      await db.blogs.update(Number.parseInt(id), { ...updatedData });
       navigate('/blogs');
     } catch (error) {
       // TODO: output error message
@@ -60,8 +60,13 @@ export default function BlogForm() {
       updateBlog(data);
     }
   };
+
   const resetForm = () => {
     reset();
+  };
+
+  const cancelForm = () => {
+    navigate('/blogs');
   };
 
   //console.log(watch('example')); // watch input value by passing the name of it
@@ -112,6 +117,15 @@ export default function BlogForm() {
             onClick={resetForm}
           >
             Reset
+          </button>
+        </div>
+        <div className="control">
+          <button
+            type="button"
+            className="button is-link is-light"
+            onClick={cancelForm}
+          >
+            Cancel
           </button>
         </div>
       </div>
