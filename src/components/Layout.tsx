@@ -1,4 +1,5 @@
 import { Outlet, NavLink } from 'react-router-dom';
+import Modal from './Modal';
 import logo from '../assets/logo.svg';
 
 export default function Layout() {
@@ -78,6 +79,7 @@ export default function Layout() {
           </p>
         </div>
       </footer>
+      <Modal />
     </>
   );
 }
