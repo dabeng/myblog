@@ -2,17 +2,25 @@ import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { db } from '../../shared/db';
 import { useLiveQuery } from 'dexie-react-hooks';
+import { useBoundStore } from '../../shared/stores/useBoundStore';
 
 export default function OnePageBlogs() {
+
+  
+  const showModal = useBoundStore((state) => state.showModal);
+  const hideModal = useBoundStore((state) => state.hideModal);
+  const updateModalContent = useBoundStore((state) => state.updateModalContent);
 
   const blogs = useLiveQuery(
     () => db.blogs
       .toArray()
   );
 
-  const deleteBlog = async (id) => {
+  const deleteBlog = async (title) => {
     try {
-      await db.blogs.delete(id);
+      updateModalContent(`Do you really want to delete the blog -- ${title} ?`);
+      showModal();
+      //await db.blogs.delete(id);
     } catch (error) {
       // TODO: output error message
     }
@@ -52,7 +60,7 @@ export default function OnePageBlogs() {
               </span>
               <span>Edit</span>
             </Link>
-            <button className="button is-small is-danger is-outlined" onClick={() => deleteBlog(blog.id)}>
+            <button className="button is-small is-danger is-outlined" onClick={() => deleteBlog(blog.title)}>
               <span className="icon">
                 <i className="fa-solid fa-trash-can"></i>
               </span>
