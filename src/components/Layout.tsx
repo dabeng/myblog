@@ -1,8 +1,12 @@
 import { Outlet, NavLink } from 'react-router-dom';
 import Modal from './Modal';
+import { useBoundStore } from '../shared/stores/useBoundStore';
 import logo from '../assets/logo.svg';
 
 export default function Layout() {
+  const isModalActive = useBoundStore((state) => state.isModalActive);
+  const modalContent = useBoundStore((state) => state.modalContent);
+
   return (
     <>
       <div
@@ -79,7 +83,7 @@ export default function Layout() {
           </p>
         </div>
       </footer>
-      <Modal />
+      <Modal isActive={isModalActive} content={modalContent}/>
     </>
   );
 }

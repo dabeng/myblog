@@ -1,12 +1,8 @@
 import classNames from 'classnames';
-import { useBoundStore } from '../shared/stores/useBoundStore';
 
-export default function Modal() {
-  const isModalActive = useBoundStore((state) => state.isModalActive);
-  const modalContent = useBoundStore((state) => state.modalContent);
-
+export default function Modal({isActive=true, content=''}) {
   return (
-    <div className={classNames({ "modal": true, "is-active": isModalActive })}>
+    <div className={classNames({ "modal": true, "is-active": isActive })}>
       <div className="modal-background"></div>
       <div className="modal-content">
         <div className="box">
@@ -21,7 +17,7 @@ export default function Modal() {
             <div className="media-content">
               <div className="content">
                 <p className="is-size-5">
-                  {modalContent}
+                  {content}
                 </p>
               </div>
               <nav className="level">
