@@ -35,8 +35,15 @@ export default function OnePageBlogs() {
 
   useEffect(() => {
     updateOKHandler(confirmDeleteBlog);
-    updateCancelHandler(cancelDeleteBlog);
   }, [blogToDelete]);
+
+  // 如果不把下面的action放在useEffect hook里面，就会报错误
+  // Cannot update a component XXX while rendering a different component XXX
+  // 因为updateCancelHandler()的调用会导致组建Layout中cancelHandler的变化，进而导致
+  // 父组件Layout的rerender, 这样的行为是与React的unidirectional data flow机制相违背的
+  useEffect(() => {
+    updateCancelHandler(cancelDeleteBlog);
+  }, []);
 
   const deleteBlog = (id, title) => {
     updateModalContent(`Do you really want to delete the blog -- ${title} ?`);
