@@ -6,6 +6,8 @@ import logo from '../assets/logo.svg';
 export default function Layout() {
   const isModalActive = useBoundStore((state) => state.isModalActive);
   const modalContent = useBoundStore((state) => state.modalContent);
+  const okHandler = useBoundStore((state) => state.okHandler);
+  const cancelHandler = useBoundStore((state) => state.cancelHandler);
 
   return (
     <>
@@ -83,7 +85,7 @@ export default function Layout() {
           </p>
         </div>
       </footer>
-      <Modal isActive={isModalActive} content={modalContent}/>
+      <Modal isActive={isModalActive} content={modalContent} onOk={okHandler} onCancel={cancelHandler}/>
     </>
   );
 }

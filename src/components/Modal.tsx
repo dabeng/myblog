@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 
-export default function Modal({isActive=true, content=''}) {
+export default function Modal({isActive=true, content='', onOk, onCancel}) {
   return (
     <div className={classNames({ "modal": true, "is-active": isActive })}>
       <div className="modal-background"></div>
@@ -23,13 +23,13 @@ export default function Modal({isActive=true, content=''}) {
               <nav className="level">
                 <div className="level-right">
                   <div className="level-item">
-                    <a className="button is-danger">OK</a>
+                    <a className="button is-danger" onClick={onOk}>OK</a>
                   </div>
                 </div>
                 <div className="level-right">
                   <div className="level-item">
                     <label className="checkbox">
-                      <a className="button is-info">Cancel</a>
+                      <a className="button is-info" onClick={onCancel}>Cancel</a>
                     </label>
                   </div>
                 </div>

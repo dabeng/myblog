@@ -1,3 +1,4 @@
+import { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { db } from '../../shared/db';
@@ -6,24 +7,41 @@ import { useBoundStore } from '../../shared/stores/useBoundStore';
 
 export default function OnePageBlogs() {
 
-  
+  const [blogToDelete, setBlogToDelete] = useState(0);
   const showModal = useBoundStore((state) => state.showModal);
   const hideModal = useBoundStore((state) => state.hideModal);
   const updateModalContent = useBoundStore((state) => state.updateModalContent);
+  const updateOKHandler = useBoundStore((state) => state.updateOKHandler);
+  const updateCancelHandler = useBoundStore((state) => state.updateCancelHandler);
 
   const blogs = useLiveQuery(
     () => db.blogs
       .toArray()
   );
 
-  const deleteBlog = async (title) => {
+  const confirmDeleteBlog = async () => {
     try {
-      updateModalContent(`Do you really want to delete the blog -- ${title} ?`);
-      showModal();
-      //await db.blogs.delete(id);
+      await db.blogs.delete(blogToDelete);
     } catch (error) {
       // TODO: output error message
+    } finally {
+      hideModal();
     }
+  };
+
+  const cancelDeleteBlog = () => {
+    hideModal();
+  };
+
+  useEffect(() => {
+    updateOKHandler(confirmDeleteBlog);
+    updateCancelHandler(cancelDeleteBlog);
+  }, [blogToDelete]);
+
+  const deleteBlog = (id, title) => {
+    updateModalContent(`Do you really want to delete the blog -- ${title} ?`);
+    showModal();
+    setBlogToDelete(id);
   };
 
   return <>
@@ -60,7 +78,7 @@ export default function OnePageBlogs() {
               </span>
               <span>Edit</span>
             </Link>
-            <button className="button is-small is-danger is-outlined" onClick={() => deleteBlog(blog.title)}>
+            <button className="button is-small is-danger is-outlined" onClick={() => deleteBlog(blog.id, blog.title)}>
               <span className="icon">
                 <i className="fa-solid fa-trash-can"></i>
               </span>
