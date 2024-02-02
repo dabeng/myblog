@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
 import classNames from 'classnames';
 
-export default function Pagination({ total, pageSize = 4, visibleSize = 5 }) {
+export default function Pagination({ total, pageSize = 4, visibleSize = 5, onChange }) {
   const [currentPage, setCurrentPage] = useState(1);
   let lastPage = Math.ceil(total / pageSize);
   let isNextBtnDisabled = currentPage * pageSize >= total;
@@ -26,6 +26,17 @@ export default function Pagination({ total, pageSize = 4, visibleSize = 5 }) {
   const gotoLastPage = (e) => {
     setCurrentPage(lastPage);
   };
+
+  // Wrapping onChange() with useEffect because states behaves like a snapshot.
+  // Updating state requests another render with the new state value, but does not
+  // affect the currentPage variable in your already-running event handler.
+  useEffect(() => {
+    // This code will run after every render
+    onChange(currentPage);
+
+    // You can perform other actions here, such as an API call
+    // Example: makeApiCall(currentPage);
+  }, [currentPage]); // The effect depends on the currentPage state
 
   return (
     <nav

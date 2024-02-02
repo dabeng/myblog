@@ -52,6 +52,10 @@ export default function OnePageBlogs() {
     setBlogToDelete(id);
   };
 
+  const jumpToPage = (page) => {
+    console.log(page);
+  };
+
   return <>
     {blogs &&
       blogs.map((blog, index) => (
@@ -98,7 +102,7 @@ export default function OnePageBlogs() {
     }
     {blogs &&
       <div className='py-4'>
-        <Pagination total={blogs.length} />
+        <Pagination total={blogs.length} onChange={jumpToPage} />
       </div>
     }
     </>;
