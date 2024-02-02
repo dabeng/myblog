@@ -1,8 +1,8 @@
 export default function BlogListPagination() {
   return (
 <nav className="pagination is-centered" role="navigation" aria-label="pagination">
-  <a className="pagination-previous">Previous</a>
-  <a className="pagination-next">Next page</a>
+  <button className="button pagination-previous">Previous</button>
+  <button className="button pagination-next">Next page</button>
   <ul className="pagination-list">
     <li><a className="pagination-link" aria-label="Goto page 1">1</a></li>
     <li><span className="pagination-ellipsis">&hellip;</span></li>

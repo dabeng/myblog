@@ -4,6 +4,7 @@ import classNames from 'classnames';
 import { db } from '../../shared/db';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useBoundStore } from '../../shared/stores/useBoundStore';
+import { Pagination } from '../../components';
 
 export default function OnePageBlogs() {
 
@@ -11,8 +12,8 @@ export default function OnePageBlogs() {
   const showModal = useBoundStore((state) => state.showModal);
   const hideModal = useBoundStore((state) => state.hideModal);
   const updateModalContent = useBoundStore((state) => state.updateModalContent);
-  const updateOKHandler = useBoundStore((state) => state.updateOKHandler);
-  const updateCancelHandler = useBoundStore((state) => state.updateCancelHandler);
+  const bindOKHandler = useBoundStore((state) => state.bindOKHandler);
+  const bindCancelHandler = useBoundStore((state) => state.bindCancelHandler);
 
   const blogs = useLiveQuery(
     () => db.blogs
@@ -34,15 +35,15 @@ export default function OnePageBlogs() {
   };
 
   useEffect(() => {
-    updateOKHandler(confirmDeleteBlog);
+    bindOKHandler(confirmDeleteBlog);
   }, [blogToDelete]);
 
   // 如果不把下面的action放在useEffect hook里面，就会报错误
   // Cannot update a component XXX while rendering a different component XXX
-  // 因为updateCancelHandler()的调用会导致组建Layout中cancelHandler的变化，进而导致
+  // 因为bindCancelHandler()的调用会导致组建Layout中cancelHandler的变化，进而导致
   // 父组件Layout的rerender, 这样的行为是与React的unidirectional data flow机制相违背的
   useEffect(() => {
-    updateCancelHandler(cancelDeleteBlog);
+    bindCancelHandler(cancelDeleteBlog);
   }, []);
 
   const deleteBlog = (id, title) => {
@@ -94,5 +95,11 @@ export default function OnePageBlogs() {
           </footer>
         </article>
       ))
-    }</>;
+    }
+    {blogs &&
+      <div className='py-4'>
+        <Pagination total={blogs.length} />
+      </div>
+    }
+    </>;
 }
