@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
+import classNames from 'classnames';
 
-export default function Pagination({ total, pageSize = 5 }) {
+export default function Pagination({ total, pageSize = 4, visibleSize = 5 }) {
   const [currentPage, setCurrentPage] = useState(1);
-
+  let lastPage = Math.ceil(total / pageSize);
   let isNextBtnDisabled = currentPage * pageSize >= total;
   let isPrevBtnDisabled = currentPage === 1;
 
@@ -40,20 +41,27 @@ export default function Pagination({ total, pageSize = 5 }) {
       </button>
       <ul className="pagination-list">
         {
-          Array(Math.ceil(total / pageSize))
+          Array(total >= visibleSize * pageSize ? visibleSize : lastPage)
             .fill(0)
             .map((v, index) => (
               <li key={index}>
                 <a
-                  className={
-                    "pagination-link" +
-                    (index + 1 === currentPage ? " is-current" : "")
-                  }
+                  className={classNames({
+                    "pagination-link": true,
+                    "is-current":
+                    currentPage <= Math.ceil(visibleSize / 2)
+                      ? currentPage === index + 1
+                      : (currentPage > Math.ceil(visibleSize / 2) && lastPage - currentPage > Math.floor(visibleSize / 2)
+                        ? currentPage === currentPage - Math.floor(visibleSize / 2) + index
+                        : currentPage === lastPage - visibleSize + index + 1)
+                  })}
                   aria-label={"Goto page " + (index + 1)}
                   aria-current={index + 1 === currentPage ? "page" : undefined}
                   onClick={gotoPage}
                 >
-                  {index + 1}
+                  {currentPage <= Math.ceil(visibleSize / 2) && index + 1}
+                  {currentPage > Math.ceil(visibleSize / 2) && lastPage - currentPage > Math.floor(visibleSize / 2) && currentPage - Math.floor(visibleSize / 2) + index}
+                  {lastPage - currentPage <= Math.floor(visibleSize / 2) && lastPage - visibleSize + index + 1}
                 </a>
               </li>
             ))

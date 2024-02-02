@@ -1,3 +1,4 @@
+// Create your store, which includes both state and (optionally) actions
 export const createModalSlice = (set) => ({
   isModalActive: false,
   showModal: () => set((state) => ({ isModalActive: true })),
