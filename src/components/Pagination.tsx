@@ -7,16 +7,24 @@ export default function Pagination({ total, pageSize = 4, visibleSize = 5 }) {
   let isNextBtnDisabled = currentPage * pageSize >= total;
   let isPrevBtnDisabled = currentPage === 1;
 
+  const gotoFirstPage = (e) => {
+    setCurrentPage(1);
+  };
+  
   const previousPage = () => {
     setCurrentPage(currentPage - 1);
+  };
+
+  const gotoPage = (e) => {
+    setCurrentPage(parseInt(e.target.textContent));
   };
 
   const nextPage = (e) => {
     setCurrentPage(currentPage + 1);
   };
 
-  const gotoPage = (e) => {
-    setCurrentPage(parseInt(e.target.textContent));
+  const gotoLastPage = (e) => {
+    setCurrentPage(lastPage);
   };
 
   return (
@@ -25,6 +33,12 @@ export default function Pagination({ total, pageSize = 4, visibleSize = 5 }) {
       role="navigation"
       aria-label="pagination"
     >
+      <button
+        className="button pagination-previous"
+        onClick={gotoFirstPage}
+      >
+        First
+      </button>
       <button
         className="button pagination-previous"
         onClick={!isPrevBtnDisabled ? previousPage : undefined}
@@ -38,6 +52,12 @@ export default function Pagination({ total, pageSize = 4, visibleSize = 5 }) {
         disabled={isNextBtnDisabled}
       >
         Next page
+      </button>
+      <button
+        className="button pagination-next"
+        onClick={gotoLastPage}
+      >
+        Last
       </button>
       <ul className="pagination-list">
         {
