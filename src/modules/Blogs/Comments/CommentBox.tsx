@@ -1,7 +1,23 @@
+import '@mdxeditor/editor/style.css'
+import { MDXEditor, UndoRedo, BoldItalicUnderlineToggles, toolbarPlugin } from '@mdxeditor/editor'
+
 export default function CommentBox() {
   return (
     <div>
-      <p>This is the Box.</p>
+      <MDXEditor
+        markdown="Hello world"
+        plugins={[
+          toolbarPlugin({
+            toolbarContents: () => (
+              <>
+                {' '}
+                <UndoRedo />
+                <BoldItalicUnderlineToggles />
+              </>
+            )
+          })
+        ]}
+      />
     </div>
   );
 }

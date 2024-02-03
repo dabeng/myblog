@@ -9,10 +9,12 @@ export default function SingleBlog() {
   return (
     <>
       <BlogArticle />
-      <p className="title is-2">Comments</p>
-      <Reactions />
-      <CommentBox />
-      <CommentList />
+      <div className="box">
+        <p className="title is-2">Comments</p>
+        <Reactions />
+        <CommentBox />
+        <CommentList />
+      </div>
     </>
   );
 }
