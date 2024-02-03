@@ -122,7 +122,7 @@ export default function OnePageBlogs() {
           </header>
           <section>
             <p className="title is-4 py-2">
-              <a>{blog.title}</a>
+              <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
             </p>
             <p className="subtitle is-6">
               {blog.subtitle}

@@ -1,6 +1,6 @@
-import { useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
-import { db } from "../../shared/db";
+import { db } from '../../shared/db';
 
 export default function BlogForm() {
   const { id } = useParams();
