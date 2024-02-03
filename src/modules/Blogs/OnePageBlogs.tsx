@@ -25,6 +25,7 @@ export default function OnePageBlogs() {
   const allBlogs = useLiveQuery(
     () => db.blogs
       .orderBy('publishedDate')
+      .reverse()
       .filter(criterionFunction)
       .toArray()
   );
@@ -42,35 +43,26 @@ export default function OnePageBlogs() {
     };
   }
 
-  // Page 1
-  let blogs = useLiveQuery(
-    () => db.blogs
-      .orderBy('publishedDate')
-      .filter(criterionFunction)
-      .limit(PAGE_SIZE)
-      .toArray()
-  );
+  const [onePageBlogs, setOnePageBlogs] = useState(undefined);
 
-  const [onePageBlogs, setOnePageBlogs] = useState(blogs);
-
-  // Page n
   const jumpToPage = async (n) => {
-    if (n === 1) {
-      blogs = await db.blogs
+    if (n === 1) { // Page 1
+      const blogs = await db.blogs
         .orderBy('publishedDate')
+        .reverse()
         .filter(criterionFunction)
         .limit(PAGE_SIZE)
         .toArray();
         setOnePageBlogs(blogs);
-    } else {
+    } else { // Page n (>1)
       let previousEntry = allBlogs[(n - 1) * PAGE_SIZE - 1];
-      blogs = await db.blogs
+      const blogs = await db.blogs
+        .orderBy('publishedDate')
+        .reverse()
         // Use index to fast forward as much as possible
         // This line is what makes the paging optimized
-        .where('publishedDate').aboveOrEqual(previousEntry.publishedDate) // makes it sorted by lastName
         // Use helper function to fast forward to the exact (n - 1) result:
         .filter(fastForward(previousEntry, 'id', criterionFunction))
-        // Limit to page size:
         .limit(PAGE_SIZE)
         .toArray();
         setOnePageBlogs(blogs);
