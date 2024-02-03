@@ -15,10 +15,67 @@ export default function OnePageBlogs() {
   const bindOKHandler = useBoundStore((state) => state.bindOKHandler);
   const bindCancelHandler = useBoundStore((state) => state.bindCancelHandler);
 
-  const blogs = useLiveQuery(
+  const PAGE_SIZE = 4;
+
+  // Criterion filter in plain JS:
+  const criterionFunction = (blog) => {
+    return true;
+  };
+
+  const allBlogs = useLiveQuery(
     () => db.blogs
+      .orderBy('publishedDate')
+      .filter(criterionFunction)
       .toArray()
   );
+
+  // A helper function we will use below.
+  // It will prevent the same results to be returned again for next page.
+  function fastForward(lastRow, idProp, otherCriterion) {
+    let fastForwardComplete = false;
+    return item => {
+      if (fastForwardComplete) return otherCriterion(item);
+      if (item[idProp] === lastRow[idProp]) {
+        fastForwardComplete = true;
+      }
+      return false;
+    };
+  }
+
+  // Page 1
+  let blogs = useLiveQuery(
+    () => db.blogs
+      .orderBy('publishedDate')
+      .filter(criterionFunction)
+      .limit(PAGE_SIZE)
+      .toArray()
+  );
+
+  const [onePageBlogs, setOnePageBlogs] = useState(blogs);
+
+  // Page n
+  const jumpToPage = async (n) => {
+    if (n === 1) {
+      blogs = await db.blogs
+        .orderBy('publishedDate')
+        .filter(criterionFunction)
+        .limit(PAGE_SIZE)
+        .toArray();
+        setOnePageBlogs(blogs);
+    } else {
+      let previousEntry = allBlogs[(n - 1) * PAGE_SIZE - 1];
+      blogs = await db.blogs
+        // Use index to fast forward as much as possible
+        // This line is what makes the paging optimized
+        .where('publishedDate').aboveOrEqual(previousEntry.publishedDate) // makes it sorted by lastName
+        // Use helper function to fast forward to the exact (n - 1) result:
+        .filter(fastForward(previousEntry, 'id', criterionFunction))
+        // Limit to page size:
+        .limit(PAGE_SIZE)
+        .toArray();
+        setOnePageBlogs(blogs);
+    }
+  };
 
   const confirmDeleteBlog = async () => {
     try {
@@ -52,13 +109,9 @@ export default function OnePageBlogs() {
     setBlogToDelete(id);
   };
 
-  const jumpToPage = (page) => {
-    console.log(page);
-  };
-
   return <>
-    {blogs &&
-      blogs.map((blog, index) => (
+    {onePageBlogs &&
+      onePageBlogs.map((blog, index) => (
         <article
           className={classNames({
             'p-4': true,
@@ -100,10 +153,10 @@ export default function OnePageBlogs() {
         </article>
       ))
     }
-    {blogs &&
+    {allBlogs &&
       <div className='py-4'>
-        <Pagination total={blogs.length} onChange={jumpToPage} />
+        <Pagination total={allBlogs.length} pageSize={PAGE_SIZE} visibleSize={5} onChange={jumpToPage} />
       </div>
     }
-    </>;
+  </>;
 }
