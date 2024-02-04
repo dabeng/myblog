@@ -25,7 +25,9 @@
     "eject": "react-scripts eject"
   },
   "devDependencies": {
-    "react-scripts": "latest"
+    "@tailwindcss/typography": "^0.5.10",
+    "react-scripts": "latest",
+    "tailwindcss": "^3.4.1"
   },
   "browserslist": {
     "production": [
