@@ -6,5 +6,5 @@
   max-width: unset;
   border: 1px dashed #aaa;
   border-top: none;
-  height: 200px;
+  min-height: 200px;
 }
