@@ -7,17 +7,12 @@ import {
   CodeToggle, codeBlockPlugin, SandpackConfig, ConditionalContents, sandpackPlugin, codeMirrorPlugin, ChangeCodeMirrorLanguage,
   ShowSandpackInfo, InsertCodeBlock, InsertSandpack,
   tablePlugin, InsertTable, CreateLink, linkPlugin, linkDialogPlugin,
-  UndoRedo, BoldItalicUnderlineToggles, toolbarPlugin
+  UndoRedo, BoldItalicUnderlineToggles, toolbarPlugin,
+  diffSourcePlugin, DiffSourceToggleWrapper
 } from '@mdxeditor/editor';
 
 export default function CommentBox() {
-  const markdown = `
-World
-  * Item 1
-  * Item 2
-  * Item 3
-    * nested item
-  `;
+  const markdown = `Hello World`;
   const defaultSnippetContent = `
 export default function App() {
   return (
@@ -59,9 +54,10 @@ export default function App() {
           codeBlockPlugin({ defaultCodeBlockLanguage: 'js' }),
           sandpackPlugin({ sandpackConfig: simpleSandpackConfig }),
           codeMirrorPlugin({ codeBlockLanguages: { js: 'JavaScript', css: 'CSS' } }),
+          diffSourcePlugin({ diffMarkdown: markdown, viewMode: 'rich-text' }),
           toolbarPlugin({
             toolbarContents: () => (
-              <>
+              <DiffSourceToggleWrapper>
                 <UndoRedo />
                 <Separator />
                 <BoldItalicUnderlineToggles />
@@ -88,7 +84,7 @@ export default function App() {
                     }
                   ]}
                 />
-              </>
+              </DiffSourceToggleWrapper>
             )
           })
         ]}
