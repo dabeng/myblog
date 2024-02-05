@@ -1,7 +1,7 @@
 import './CommentBox.css';
 import '@mdxeditor/editor/style.css';
 import {
-  MDXEditor,
+  MDXEditor, MDXEditorMethods,
   Separator, thematicBreakPlugin, InsertThematicBreak,
   headingsPlugin, listsPlugin, quotePlugin, BlockTypeSelect, ListsToggle,
   CodeToggle, codeBlockPlugin, SandpackConfig, ConditionalContents, sandpackPlugin, codeMirrorPlugin, ChangeCodeMirrorLanguage,
@@ -10,8 +10,10 @@ import {
   UndoRedo, BoldItalicUnderlineToggles, toolbarPlugin,
   diffSourcePlugin, DiffSourceToggleWrapper
 } from '@mdxeditor/editor';
+import { useRef } from 'react';
 
-export default function CommentBox() {
+export default function CommentBox({onComment}) {
+  const editorRef = useRef<MDXEditorMethods>(null);
   const markdown = `Hello World`;
   const defaultSnippetContent = `
 export default function App() {
@@ -41,6 +43,7 @@ export default function App() {
   return (
     <div>
       <MDXEditor
+        ref={editorRef}
         markdown={markdown}
         contentEditableClassName="prose"
         plugins={[
@@ -89,6 +92,9 @@ export default function App() {
           })
         ]}
       />
+      <div className="is-flex is-justify-content-flex-end my-2">
+        <button className="button is-primary" onClick={()=>{onComment(editorRef.current?.getMarkdown())}}>Comment</button>
+      </div>
     </div>
   );
 }
