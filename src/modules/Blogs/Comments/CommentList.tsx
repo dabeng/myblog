@@ -1,7 +1,7 @@
 export default function CommentList() {
   return (
     <div>
-      <p className="title is-6" style={{marginBottom: "-2rem"}}>37 Comments</p>
+      <p className="title is-6 pt-6" style={{marginBottom: "-2rem"}}>37 Comments</p>
       <div className="tabs is-right">
         <ul>
           <li className="is-active"><a>Best</a></li>

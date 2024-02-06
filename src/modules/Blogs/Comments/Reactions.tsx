@@ -1,8 +1,9 @@
 export default function Reactions() {
   return (
     <div>
-      <p>This is the Reactions.</p>
-      <nav className="level">
+      <p className="title is-4 has-text-centered">What do you think?</p>
+      <p className="subtitle is-5 has-text-centered">35 responses</p>
+      <nav className="level my-6">
         <div className="level-item has-text-centered">
           <div>
             <p className="heading">
