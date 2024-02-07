@@ -6,16 +6,13 @@ import {
 } from '../../modules/Blogs/Comments';
 
 export default function SingleBlog() {
-  const addComment = (markdown) => {
-    console.log(markdown);
-  };
   return (
     <>
       <BlogArticle />
       <div className="box">
         <p className="title is-2">Comments</p>
         <Reactions />
-        <CommentBox onComment={addComment}/>
+        <CommentBox />
         <CommentList />
       </div>
     </>

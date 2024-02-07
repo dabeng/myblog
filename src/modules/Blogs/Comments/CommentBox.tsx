@@ -11,8 +11,11 @@ import {
   diffSourcePlugin, DiffSourceToggleWrapper
 } from '@mdxeditor/editor';
 import { useRef } from 'react';
+import { useParams } from 'react-router-dom';
+import { db } from '../../../shared/db';
 
-export default function CommentBox({onComment}) {
+export default function CommentBox() {
+  const { id } = useParams();
   const editorRef = useRef<MDXEditorMethods>(null);
   const markdown = `Hello World`;
   const defaultSnippetContent = `
@@ -40,6 +43,22 @@ export default function App() {
       },
     ]
   };
+
+  const onComment = async (markdown) => {
+    try {
+      // TODO：add author
+      await db.comments.add({
+        content: markdown,
+        publishedDate: new Date(),
+        blogId: Number.parseInt(id),
+        parentCommentId: null
+      });
+    } catch (error) {
+      // TODO: output error message
+      var a = 1;
+    }
+  };
+
   return (
     <div>
       <MDXEditor
