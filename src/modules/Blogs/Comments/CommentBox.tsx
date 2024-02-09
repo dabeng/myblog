@@ -13,8 +13,13 @@ import {
 import { useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import { db } from '../../../shared/db';
+import { useBoundStore } from '../../../shared/stores/useBoundStore';
 
 export default function CommentBox() {
+  const showNotification = useBoundStore((state) => state.showNotification);
+  const hideNotification = useBoundStore((state) => state.hideNotification);
+  const updateNotificationContent = useBoundStore((state) => state.updateNotificationContent);
+
   const { id } = useParams();
   const editorRef = useRef<MDXEditorMethods>(null);
   const markdown = `Hello World`;
@@ -47,15 +52,15 @@ export default function App() {
   const onComment = async (markdown) => {
     try {
       // TODO：add author
-      await db.comments.add({
+      await db.comments1.add({
         content: markdown,
         publishedDate: new Date(),
         blogId: Number.parseInt(id),
         parentCommentId: null
       });
-    } catch (error) {
-      // TODO: output error message
-      var a = 1;
+    } catch ({ name, message }) {
+      updateNotificationContent(`${name}: ${message}`);
+      showNotification();
     }
   };
 

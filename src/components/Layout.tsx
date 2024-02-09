@@ -1,9 +1,12 @@
 import { Outlet, NavLink } from 'react-router-dom';
 import Modal from './Modal';
+import Notification from './Notification';
 import { useBoundStore } from '../shared/stores/useBoundStore';
 import logo from '../assets/logo.svg';
 
 export default function Layout() {
+  const isNotificationActive = useBoundStore((state) => state.isNotificationActive);
+  const notificationContent = useBoundStore((state) => state.notificationContent);
   const isModalActive = useBoundStore((state) => state.isModalActive);
   const modalContent = useBoundStore((state) => state.modalContent);
   const okHandler = useBoundStore((state) => state.okHandler);
@@ -85,6 +88,7 @@ export default function Layout() {
           </p>
         </div>
       </footer>
+      <Notification isActive={isNotificationActive} content={notificationContent} />
       <Modal isActive={isModalActive} content={modalContent} onOk={okHandler} onCancel={cancelHandler}/>
     </>
   );
