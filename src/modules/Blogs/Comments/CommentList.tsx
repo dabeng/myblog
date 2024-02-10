@@ -11,8 +11,8 @@ export default function CommentList() {
       </div>
       <article className="media">
         <figure className="media-left">
-          <p className="image is-64x64">
-            <img src="https://bulma.io/images/placeholders/128x128.png" />
+          <p className="image is-64x64 has-text-centered">
+            <i className="fa-solid fa-user fa-4x"></i>
           </p>
         </figure>
         <div className="media-content">
@@ -28,8 +28,8 @@ export default function CommentList() {
 
           <article className="media">
             <figure className="media-left">
-              <p className="image is-48x48">
-                <img src="https://bulma.io/images/placeholders/96x96.png" />
+              <p className="image is-48x48 has-text-centered">
+                <i className="fa-solid fa-user fa-3x"></i>
               </p>
             </figure>
             <div className="media-content">
