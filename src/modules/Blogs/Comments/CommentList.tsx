@@ -1,4 +1,21 @@
+import { db } from '../../../shared/db';
+import { useParams } from 'react-router-dom';
+import { useLiveQuery } from 'dexie-react-hooks';
+
 export default function CommentList() {
+  const { id } = useParams();
+
+  // Criterion filter in plain JS:
+  const criterionFunction = (comment) => {
+    return comment.blogId === id;
+  };
+  const comments = useLiveQuery(
+    () => db.comments
+      .orderBy('publishedDate')
+      .reverse()
+      .filter(criterionFunction)
+      .toArray()
+  );
   return (
     <div>
       <p className="title is-6 pt-6" style={{marginBottom: "-2rem"}}>37 Comments</p>
@@ -9,6 +26,24 @@ export default function CommentList() {
           <li><a>Oldest</a></li>
         </ul>
       </div>
+      <article className="media">
+        <figure className="media-left">
+          <p className="image is-64x64 has-text-centered">
+            <i className="fa-solid fa-user fa-4x"></i>
+          </p>
+        </figure>
+        <div className="media-content">
+          <div className="content">
+            <p>
+              <strong>Barbara Middleton</strong>
+              <br />
+              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec ultricies elit blandit non. Suspendisse pellentesque mauris sit amet dolor blandit rutrum. Nunc in tempus turpis.
+              <br />
+              <small><a>Like</a> · <a>Reply</a> · 3 hrs</small>
+            </p>
+          </div>
+        </div>
+      </article>
       <article className="media">
         <figure className="media-left">
           <p className="image is-64x64 has-text-centered">
