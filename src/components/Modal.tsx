@@ -36,7 +36,7 @@ export default function Modal({isActive=true, content='', onOk, onCancel}) {
               </nav>
             </div>
             <div className="media-right">
-              <button className="delete"></button>
+              <button className="delete" onClick={onCancel}></button>
             </div>
           </article>
         </div>
