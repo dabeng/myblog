@@ -7,10 +7,11 @@ import logo from '../assets/logo.svg';
 export default function Layout() {
   const isNotificationActive = useBoundStore((state) => state.isNotificationActive);
   const notificationContent = useBoundStore((state) => state.notificationContent);
+  const notificationCancelHandler = useBoundStore((state) => state.notificationCancelHandler);
   const isModalActive = useBoundStore((state) => state.isModalActive);
   const modalContent = useBoundStore((state) => state.modalContent);
-  const okHandler = useBoundStore((state) => state.okHandler);
-  const cancelHandler = useBoundStore((state) => state.cancelHandler);
+  const modalOKHandler = useBoundStore((state) => state.modalOKHandler);
+  const modalCancelHandler = useBoundStore((state) => state.modalCancelHandler);
 
   return (
     <>
@@ -88,8 +89,8 @@ export default function Layout() {
           </p>
         </div>
       </footer>
-      <Notification isActive={isNotificationActive} content={notificationContent} />
-      <Modal isActive={isModalActive} content={modalContent} onOk={okHandler} onCancel={cancelHandler}/>
+      <Notification isActive={isNotificationActive} content={notificationContent} onCancel={notificationCancelHandler}/>
+      <Modal isActive={isModalActive} content={modalContent} onOk={modalOKHandler} onCancel={modalCancelHandler}/>
     </>
   );
 }

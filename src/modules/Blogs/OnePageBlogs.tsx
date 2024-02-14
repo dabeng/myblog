@@ -12,8 +12,8 @@ export default function OnePageBlogs() {
   const showModal = useBoundStore((state) => state.showModal);
   const hideModal = useBoundStore((state) => state.hideModal);
   const updateModalContent = useBoundStore((state) => state.updateModalContent);
-  const bindOKHandler = useBoundStore((state) => state.bindOKHandler);
-  const bindCancelHandler = useBoundStore((state) => state.bindCancelHandler);
+  const bindModalOKHandler = useBoundStore((state) => state.bindModalOKHandler);
+  const bindModalCancelHandler = useBoundStore((state) => state.bindModalCancelHandler);
 
   const PAGE_SIZE = 4;
 
@@ -84,15 +84,15 @@ export default function OnePageBlogs() {
   };
 
   useEffect(() => {
-    bindOKHandler(confirmDeleteBlog);
+    bindModalOKHandler(confirmDeleteBlog);
   }, [blogToDelete]);
 
   // 如果不把下面的action放在useEffect hook里面，就会报错误
   // Cannot update a component XXX while rendering a different component XXX
-  // 因为bindCancelHandler()的调用会导致组建Layout中cancelHandler的变化，进而导致
+  // 因为bindModalCancelHandler()的调用会导致组件Layout中cancelModalHandler的变化，进而导致
   // 父组件Layout的rerender, 这样的行为是与React的unidirectional data flow机制相违背的
   useEffect(() => {
-    bindCancelHandler(cancelDeleteBlog);
+    bindModalCancelHandler(cancelDeleteBlog);
   }, []);
 
   const deleteBlog = (id, title) => {

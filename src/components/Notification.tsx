@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-export default function Notification({ isActive = false, content = '' }) {
+export default function Notification({ isActive = false, content = '', onCancel }) {
 
   return (
     <div className={classNames({
@@ -13,7 +13,7 @@ export default function Notification({ isActive = false, content = '' }) {
         width: "100%",
         zIndex: 9999
       }}>
-      <button className="delete"></button>
+      <button className="delete" onClick={onCancel}></button>
       {content}
     </div>
   );

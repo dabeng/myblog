@@ -4,4 +4,6 @@ export const createNotificationSlice = (set) => ({
   hideNotification: () => set((state) => ({ isNotificationActive: false })),
   notificationContent: '',
   updateNotificationContent: (notificationContent) => set(() => ({ notificationContent })),
+  notificationCancelHandler: () => {},
+  bindNotificationCancelHandler: (notificationCancelHandler) => set(() => ({ notificationCancelHandler })),
 });

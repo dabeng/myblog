@@ -10,7 +10,7 @@ import {
   UndoRedo, BoldItalicUnderlineToggles, toolbarPlugin,
   diffSourcePlugin, DiffSourceToggleWrapper
 } from '@mdxeditor/editor';
-import { useRef } from 'react';
+import { useRef, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
 import { db } from '../../../shared/db';
 import { useBoundStore } from '../../../shared/stores/useBoundStore';
@@ -19,6 +19,15 @@ export default function CommentBox() {
   const showNotification = useBoundStore((state) => state.showNotification);
   const hideNotification = useBoundStore((state) => state.hideNotification);
   const updateNotificationContent = useBoundStore((state) => state.updateNotificationContent);
+  const bindNotificationCancelHandler = useBoundStore((state) => state.bindNotificationCancelHandler);
+
+  const cancelNotification = () => {
+    hideNotification();
+  };
+
+  useEffect(() => {
+    bindNotificationCancelHandler(cancelNotification);
+  }, []);
 
   const { id } = useParams();
   const editorRef = useRef<MDXEditorMethods>(null);
