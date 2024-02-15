@@ -61,7 +61,7 @@ export default function App() {
   const onComment = async (markdown) => {
     try {
       // TODO：add author
-      await db.comments1.add({
+      await db.comments.add({
         content: markdown,
         publishedDate: new Date(),
         blogId: Number.parseInt(id),
