@@ -2,6 +2,7 @@ import { db } from '../../../shared/db';
 import { useParams } from 'react-router-dom';
 import { useLiveQuery } from 'dexie-react-hooks';
 import Markdown from 'react-markdown';
+import remarkGfm from 'remark-gfm';
 
 export default function CommentList() {
   const { id } = useParams();
@@ -40,7 +41,7 @@ export default function CommentList() {
                 <strong>Author</strong>
               </header>
               <div className="comment-body">
-                <Markdown>{comment.content}</Markdown>
+                <Markdown remarkPlugins={[remarkGfm]}>{comment.content}</Markdown>
               </div>
               <footer className="comment-footer">
                 <small><a>Like</a> · <a>Reply</a> · 3 hrs</small>
