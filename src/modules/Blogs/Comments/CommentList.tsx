@@ -37,14 +37,31 @@ export default function CommentList() {
           </figure>
           <div className="media-content">
             <div className="content">
-              <header className="comment-header">
-                <strong>Author</strong>
+              <header className="comment-header is-flex is-justify-content-space-between">
+                <span className="comment-author">Author</span>
+                <time className="comment-published-date">{(new Date(comment.publishedDate)).toLocaleDateString('zh-Hans-CN')}</time>
               </header>
               <div className="comment-body">
                 <Markdown remarkPlugins={[remarkGfm]}>{comment.content}</Markdown>
               </div>
               <footer className="comment-footer">
-                <small><a>Like</a> · <a>Reply</a> · 3 hrs</small>
+                <p className="buttons">
+                  <button className="button is-info is-inverted">
+                    <span className="icon">
+                      <i className="fa-regular fa-thumbs-up"></i>
+                    </span>
+                    <span className="upvote-count">0</span>
+                  </button>
+                  <button className="button is-info is-inverted">
+                    <span className="icon">
+                      <i className="fa-regular fa-thumbs-down"></i>
+                    </span>
+                    <span className="downvote-count">0</span>
+                  </button>
+                  <button className="button is-info is-inverted">
+                    <span>Reply</span>
+                  </button>
+                </p>
               </footer>
             </div>
           </div>
