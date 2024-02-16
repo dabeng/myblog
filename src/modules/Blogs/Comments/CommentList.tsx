@@ -1,23 +1,37 @@
 import { db } from '../../../shared/db';
-import { useParams } from 'react-router-dom';
+import { useState } from 'react';
 import { useLiveQuery } from 'dexie-react-hooks';
+import CommentBox from './CommentBox';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
-export default function CommentList() {
-  const { id } = useParams();
-
+export default function CommentList({blogId}) {
   // Criterion filter in plain JS:
   const criterionFunction = (comment) => {
-    return comment.blogId === Number.parseInt(id);
+    return comment.blogId === Number.parseInt(blogId);
   };
   const comments = useLiveQuery(
     () => db.comments
       .orderBy('publishedDate')
       .reverse()
       .filter(criterionFunction)
-      .toArray()
+      .toArray((comments)=> {
+        setSubCommentBoxOpen(Array.from(Array(comments.length), () => false));
+        return comments;
+      })
   );
+
+  const [subCommentBoxOpen, setSubCommentBoxOpen] = useState([]);
+  const toggleSubCommentBox = function (index) {
+    setSubCommentBoxOpen(subCommentBoxOpen.map((open, i) => {
+      if (i === index) {
+        return !open;
+      } else {
+        return open;
+      }
+    }));
+  };
+
   return (
     <div>
       <p className="title is-6 pt-6" style={{ marginBottom: "-2rem" }}>37 Comments</p>
@@ -58,10 +72,13 @@ export default function CommentList() {
                     </span>
                     <span className="downvote-count">0</span>
                   </button>
-                  <button className="button is-info is-inverted">
+                  <button className="button is-info is-inverted" onClick={()=> {toggleSubCommentBox(index);}}>
                     <span>Reply</span>
                   </button>
                 </p>
+                {subCommentBoxOpen[index] && (
+                  <CommentBox blogId={Number.parseInt(blogId)} parentCommentId={comment.id} />
+                )}
               </footer>
             </div>
           </div>

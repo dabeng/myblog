@@ -11,11 +11,10 @@ import {
   diffSourcePlugin, DiffSourceToggleWrapper
 } from '@mdxeditor/editor';
 import { useRef, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
 import { db } from '../../../shared/db';
 import { useBoundStore } from '../../../shared/stores/useBoundStore';
 
-export default function CommentBox() {
+export default function CommentBox({blogId, parentCommentId = null}) {
   const showNotification = useBoundStore((state) => state.showNotification);
   const hideNotification = useBoundStore((state) => state.hideNotification);
   const updateNotificationContent = useBoundStore((state) => state.updateNotificationContent);
@@ -29,7 +28,6 @@ export default function CommentBox() {
     bindNotificationCancelHandler(cancelNotification);
   }, []);
 
-  const { id } = useParams();
   const editorRef = useRef<MDXEditorMethods>(null);
   const markdown = `Hello World`;
   const defaultSnippetContent = `
@@ -64,8 +62,8 @@ export default function App() {
       await db.comments.add({
         content: markdown,
         publishedDate: new Date(),
-        blogId: Number.parseInt(id),
-        parentCommentId: null
+        blogId: blogId,
+        parentCommentId: parentCommentId
       });
     } catch ({ name, message }) {
       updateNotificationContent(`${name}: ${message}`);
