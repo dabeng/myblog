@@ -38,8 +38,8 @@ export default function CommentList() {
           <div className="media-content">
             <div className="content">
               <header className="comment-header is-flex is-justify-content-space-between">
-                <span className="comment-author">Author</span>
-                <time className="comment-published-date">{(new Date(comment.publishedDate)).toLocaleDateString('zh-Hans-CN')}</time>
+                <span className="comment-author has-text-weight-bold">Author</span>
+                <time className="comment-published-date is-size-7 has-text-weight-bold has-text-grey">{(new Date(comment.publishedDate)).toLocaleDateString('zh-Hans-CN')}</time>
               </header>
               <div className="comment-body">
                 <Markdown remarkPlugins={[remarkGfm]}>{comment.content}</Markdown>
