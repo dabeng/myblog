@@ -5,8 +5,47 @@ import CommentBox from './CommentBox';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
-export default function CommentList({blogId}) {
-  // Criterion filter in plain JS:
+export default function CommentList({ blogId }) {
+  const [toplevelSortField, setToplevelSortField] = useState('publisedDate');
+  const [toplevelSortOrder, setToplevelSortOrder] = useState('descending');
+  const [secondlevelSortField, setSecondlevelSortField] = useState('publisedDate');
+  const [secondlevelSortOrder, setSecondlevelSortOrder] = useState('ascending');
+  const sortToplevelComments = function (a, b) {
+    if (toplevelSortOrder === 'ascending') {
+      return a[toplevelSortField] - b[toplevelSortField];
+    } else {
+      return b[toplevelSortField] - a[toplevelSortField];
+    }
+  };
+  const sortSecondlevelComments = function (a, b) {
+    if (secondlevelSortOrder === 'ascending') {
+      return a[secondlevelSortField] - b[secondlevelSortField];
+    } else {
+      return b[secondlevelSortField] - a[secondlevelSortField];
+    }
+  };
+  const processComments = function (rawComments) {
+    //【1】先从原始评论中，划分出top level评论和second level评论
+    const topLevel = rawComments.filter((c) => !c.parentCommentId);
+    const secondLevel = rawComments.filter((c) => c.parentCommentId);
+    //【2】然后second level的评论插入到top level评论的subComments属性下
+    secondLevel.forEach((sc) => {
+      const parentComment = topLevel.find((tc) => tc.id === sc.parentCommentId);
+      if (parentComment.subComments) {
+        parentComment.subComments.push(sc);
+      } else {
+        parentComment.subComments = [sc];
+      }
+    });
+    //【3】按照用户指定的排序规则，对top level评论和second level评论进行排序
+    topLevel.sort(sortToplevelComments);
+    topLevel.forEach((tc, index) => {
+      tc?.subComments?.sort(sortSecondlevelComments);
+    });
+    //【4】最后，附带生成控制注释框显示/隐藏的标志位数组
+    setCommentBoxOpen(Array.from(Array(topLevel.length), () => false));
+    return topLevel;
+  };
   const criterionFunction = (comment) => {
     return comment.blogId === Number.parseInt(blogId);
   };
@@ -15,15 +54,12 @@ export default function CommentList({blogId}) {
       .orderBy('publishedDate')
       .reverse()
       .filter(criterionFunction)
-      .toArray((comments)=> {
-        setSubCommentBoxOpen(Array.from(Array(comments.length), () => false));
-        return comments;
-      })
+      .toArray(processComments)
   );
 
-  const [subCommentBoxOpen, setSubCommentBoxOpen] = useState([]);
+  const [commentBoxOpen, setCommentBoxOpen] = useState([]);
   const toggleSubCommentBox = function (index) {
-    setSubCommentBoxOpen(subCommentBoxOpen.map((open, i) => {
+    setCommentBoxOpen(commentBoxOpen.map((open, i) => {
       if (i === index) {
         return !open;
       } else {
@@ -72,55 +108,56 @@ export default function CommentList({blogId}) {
                     </span>
                     <span className="downvote-count">0</span>
                   </button>
-                  <button className="button is-info is-inverted" onClick={()=> {toggleSubCommentBox(index);}}>
-                    <span>Reply</span>
-                  </button>
                 </p>
-                {subCommentBoxOpen[index] && (
-                  <CommentBox blogId={Number.parseInt(blogId)} parentCommentId={comment.id} />
-                )}
               </footer>
             </div>
+            {comment?.subComments?.map((subComment, i) => (
+              <article className="media" key={i}>
+                <figure className="media-left">
+                  <p className="image is-64x64 has-text-centered">
+                    <i className="fa-solid fa-user fa-4x"></i>
+                  </p>
+                </figure>
+                <div className="media-content">
+                  <div className="content">
+                    <header className="comment-header is-flex is-justify-content-space-between">
+                      <span className="comment-author has-text-weight-bold">Author</span>
+                      <time className="comment-published-date is-size-7 has-text-weight-bold has-text-grey">{(new Date(subComment.publishedDate)).toLocaleDateString('zh-Hans-CN')}</time>
+                    </header>
+                    <div className="comment-body">
+                      <Markdown remarkPlugins={[remarkGfm]}>{subComment.content}</Markdown>
+                    </div>
+                    <footer className="comment-footer">
+                      <p className="buttons">
+                        <button className="button is-info is-inverted">
+                          <span className="icon">
+                            <i className="fa-regular fa-thumbs-up"></i>
+                          </span>
+                          <span className="upvote-count">0</span>
+                        </button>
+                        <button className="button is-info is-inverted">
+                          <span className="icon">
+                            <i className="fa-regular fa-thumbs-down"></i>
+                          </span>
+                          <span className="downvote-count">0</span>
+                        </button>
+                      </p>
+                    </footer>
+                  </div>
+                </div>
+              </article>
+            ))}
+            <p className="buttons">
+              <button className="button is-info is-inverted" onClick={() => { toggleSubCommentBox(index); }}>
+                <span>Reply</span>
+              </button>
+            </p>
+            {commentBoxOpen[index] && (
+              <CommentBox blogId={Number.parseInt(blogId)} parentCommentId={comment.id} />
+            )}
           </div>
         </article>
       ))}
-      <article className="media">
-        <figure className="media-left">
-          <p className="image is-64x64 has-text-centered">
-            <i className="fa-solid fa-user fa-4x"></i>
-          </p>
-        </figure>
-        <div className="media-content">
-          <div className="content">
-            <p>
-              <strong>Barbara Middleton</strong>
-              <br />
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Duis porta eros lacus, nec ultricies elit blandit non. Suspendisse pellentesque mauris sit amet dolor blandit rutrum. Nunc in tempus turpis.
-              <br />
-              <small><a>Like</a> · <a>Reply</a> · 3 hrs</small>
-            </p>
-          </div>
-
-          <article className="media">
-            <figure className="media-left">
-              <p className="image is-48x48 has-text-centered">
-                <i className="fa-solid fa-user fa-3x"></i>
-              </p>
-            </figure>
-            <div className="media-content">
-              <div className="content">
-                <p>
-                  <strong>Sean Brown</strong>
-                  <br />
-                  Donec sollicitudin urna eget eros malesuada sagittis. Pellentesque habitant morbi tristique senectus et netus et malesuada fames ac turpis egestas. Aliquam blandit nisl a nulla sagittis, a lobortis leo feugiat.
-                  <br />
-                  <small><a>Like</a> · <a>Reply</a> · 2 hrs</small>
-                </p>
-              </div>
-            </div>
-          </article>
-        </div>
-      </article>
     </div>
   );
 }
