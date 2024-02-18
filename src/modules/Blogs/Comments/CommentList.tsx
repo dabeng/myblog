@@ -6,9 +6,9 @@ import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
 export default function CommentList({ blogId }) {
-  const [toplevelSortField, setToplevelSortField] = useState('publisedDate');
+  const [toplevelSortField, setToplevelSortField] = useState('publishedDate');
   const [toplevelSortOrder, setToplevelSortOrder] = useState('descending');
-  const [secondlevelSortField, setSecondlevelSortField] = useState('publisedDate');
+  const [secondlevelSortField, setSecondlevelSortField] = useState('publishedDate');
   const [secondlevelSortOrder, setSecondlevelSortOrder] = useState('ascending');
   const sortToplevelComments = function (a, b) {
     if (toplevelSortOrder === 'ascending') {
