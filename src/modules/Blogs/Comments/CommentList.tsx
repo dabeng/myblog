@@ -6,6 +6,8 @@ import CommentBox from './CommentBox';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 
+import './CommentList.css';
+
 export default function CommentList({ blogId }) {
   const [toplevelSortField, setToplevelSortField] = useState('publishedDate');
   const [toplevelSortOrder, setToplevelSortOrder] = useState('descending');
@@ -48,7 +50,7 @@ export default function CommentList({ blogId }) {
         commentCollapsedInitVal[index].push(Array.from(Array(tc.subComments.length), () => false));
       }
     });
-    //【4】最后，附带生成控制注释框显示/隐藏的标志位数组
+    //【4】最后，附带生成控制显示/隐藏注释框的标志位数组、控制展开/折叠评论内容的标识位数组
     setCommentBoxOpen(Array.from(Array(topLevel.length), () => false));
     setCommentCollapsed(commentCollapsedInitVal);
     return topLevel;
@@ -132,8 +134,8 @@ export default function CommentList({ blogId }) {
                     </button>
                   </p>
                 </div>
-                <div>
-                  <time className="comment-published-date is-size-7 has-text-weight-bold has-text-grey">{(new Date(comment.publishedDate)).toLocaleDateString('zh-Hans-CN')}</time>
+                <div className="comment-date">
+                  <time className="is-size-7 has-text-weight-bold has-text-grey">{(new Date(comment.publishedDate)).toLocaleDateString('zh-Hans-CN')}</time>
                 </div>
               </header>
               {!commentCollapsed[index][0] &&
