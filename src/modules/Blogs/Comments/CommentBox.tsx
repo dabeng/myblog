@@ -29,7 +29,7 @@ export default function CommentBox({blogId, parentCommentId = null}) {
   }, []);
 
   const editorRef = useRef<MDXEditorMethods>(null);
-  const markdown = `Hello World`;
+  const markdown = ``;
   const defaultSnippetContent = `
 export default function App() {
   return (
