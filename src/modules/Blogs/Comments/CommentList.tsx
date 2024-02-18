@@ -87,9 +87,25 @@ export default function CommentList({ blogId }) {
           </figure>
           <div className="media-content">
             <div className="content">
-              <header className="comment-header is-flex is-justify-content-space-between">
-                <span className="comment-author has-text-weight-bold">Author</span>
-                <time className="comment-published-date is-size-7 has-text-weight-bold has-text-grey">{(new Date(comment.publishedDate)).toLocaleDateString('zh-Hans-CN')}</time>
+              <header className="comment-header">
+                <div className="is-flex is-justify-content-space-between">
+                  <span className="comment-author is-size-5">Author</span>
+                  <p className="buttons">
+                    <button className="button is-info is-inverted">
+                      <span className="icon">
+                        <i className="fa-solid fa-minus"></i>
+                      </span>
+                    </button>
+                    <button className="button is-info is-inverted">
+                      <span className="icon">
+                        <i className="fa-solid fa-flag"></i>
+                      </span>
+                    </button>
+                  </p>
+                </div>
+                <div>
+                  <time className="comment-published-date is-size-7 has-text-weight-bold has-text-grey">{(new Date(comment.publishedDate)).toLocaleDateString('zh-Hans-CN')}</time>
+                </div>
               </header>
               <div className="comment-body">
                 <Markdown remarkPlugins={[remarkGfm]}>{comment.content}</Markdown>
@@ -114,15 +130,31 @@ export default function CommentList({ blogId }) {
             {comment?.subComments?.map((subComment, i) => (
               <article className="media" key={i}>
                 <figure className="media-left">
-                  <p className="image is-64x64 has-text-centered">
-                    <i className="fa-solid fa-user fa-4x"></i>
+                  <p className="image is-48x48 has-text-centered">
+                    <i className="fa-solid fa-user fa-3x"></i>
                   </p>
                 </figure>
                 <div className="media-content">
                   <div className="content">
-                    <header className="comment-header is-flex is-justify-content-space-between">
-                      <span className="comment-author has-text-weight-bold">Author</span>
-                      <time className="comment-published-date is-size-7 has-text-weight-bold has-text-grey">{(new Date(subComment.publishedDate)).toLocaleDateString('zh-Hans-CN')}</time>
+                    <header className="comment-header">
+                      <div className="is-flex is-justify-content-space-between">
+                        <span className="comment-author is-size-5">Author</span>
+                        <p className="buttons">
+                          <button className="button is-info is-inverted">
+                            <span className="icon">
+                              <i className="fa-solid fa-minus"></i>
+                            </span>
+                          </button>
+                          <button className="button is-info is-inverted">
+                            <span className="icon">
+                              <i className="fa-solid fa-flag"></i>
+                            </span>
+                          </button>
+                        </p>
+                      </div>
+                      <div>
+                        <time className="comment-published-date is-size-7 has-text-weight-bold has-text-grey">{(new Date(subComment.publishedDate)).toLocaleDateString('zh-Hans-CN')}</time>
+                      </div>
                     </header>
                     <div className="comment-body">
                       <Markdown remarkPlugins={[remarkGfm]}>{subComment.content}</Markdown>
