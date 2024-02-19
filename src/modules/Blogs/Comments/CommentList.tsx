@@ -105,8 +105,8 @@ export default function CommentList({ blogId }) {
           <li><a>Oldest</a></li>
         </ul>
       </div>
-      {comments?.map((comment, index) => (
-        <article className="media" key={index}>
+      {comments?.map((comment, tIndex) => (
+        <article className="media" key={tIndex}>
           <figure className="media-left">
             <p className="image is-64x64 has-text-centered">
               <i className="fa-solid fa-user fa-4x"></i>
@@ -118,12 +118,12 @@ export default function CommentList({ blogId }) {
                 <div className="is-flex is-justify-content-space-between">
                   <span className="comment-author is-size-5">Author</span>
                   <p className="buttons">
-                    <button className="button is-info is-inverted" onClick={() => { toggleToplevelCommentCollapsed(index); }}>
+                    <button className="button is-info is-inverted" onClick={() => { toggleToplevelCommentCollapsed(tIndex); }}>
                       <span className="icon">
                         <i className={classNames({
                           "fa-solid": true,
-                          "fa-plus": commentCollapsed[index][0],
-                          "fa-minus": !commentCollapsed[index][0]
+                          "fa-plus": commentCollapsed[tIndex][0],
+                          "fa-minus": !commentCollapsed[tIndex][0]
                         })}></i>
                       </span>
                     </button>
@@ -138,7 +138,7 @@ export default function CommentList({ blogId }) {
                   <time className="is-size-7 has-text-weight-bold has-text-grey">{(new Date(comment.publishedDate)).toLocaleDateString('zh-Hans-CN')}</time>
                 </div>
               </header>
-              {!commentCollapsed[index][0] &&
+              {!commentCollapsed[tIndex][0] &&
                 <>
                   <div className="comment-body">
                     <Markdown remarkPlugins={[remarkGfm]}>{comment.content}</Markdown>
@@ -162,10 +162,10 @@ export default function CommentList({ blogId }) {
                 </>
               }
             </div>
-            {!commentCollapsed[index][0] &&
+            {!commentCollapsed[tIndex][0] &&
               <>
-                {comment?.subComments?.map((subComment, i) => (
-                  <article className="media" key={i}>
+                {comment?.subComments?.map((subComment, sIndex) => (
+                  <article className="media" key={sIndex}>
                     <figure className="media-left">
                       <p className="image is-48x48 has-text-centered">
                         <i className="fa-solid fa-user fa-3x"></i>
@@ -177,12 +177,12 @@ export default function CommentList({ blogId }) {
                           <div className="is-flex is-justify-content-space-between">
                             <span className="comment-author is-size-5">Author</span>
                             <p className="buttons">
-                              <button className="button is-info is-inverted" onClick={() => { toggleSecondlevelCommentCollapsed(index, i); }}>
+                              <button className="button is-info is-inverted" onClick={() => { toggleSecondlevelCommentCollapsed(tIndex, sIndex); }}>
                                 <span className="icon">
                                   <i className={classNames({
                                     "fa-solid": true,
-                                    "fa-plus": commentCollapsed[index][1][i],
-                                    "fa-minus": !commentCollapsed[index][1][i]
+                                    "fa-plus": commentCollapsed[tIndex][1][sIndex],
+                                    "fa-minus": !commentCollapsed[tIndex][1][sIndex]
                                   })}></i>
                                 </span>
                               </button>
@@ -197,7 +197,7 @@ export default function CommentList({ blogId }) {
                             <time className="comment-published-date is-size-7 has-text-weight-bold has-text-grey">{(new Date(subComment.publishedDate)).toLocaleDateString('zh-Hans-CN')}</time>
                           </div>
                         </header>
-                        {!commentCollapsed[index][1][i] &&
+                        {!commentCollapsed[tIndex][1][sIndex] &&
                           <>
                             <div className="comment-body">
                               <Markdown remarkPlugins={[remarkGfm]}>{subComment.content}</Markdown>
@@ -225,11 +225,11 @@ export default function CommentList({ blogId }) {
                   </article>
                 ))}
                 <p className="buttons">
-                  <button className="button is-info is-inverted" onClick={() => { toggleSubCommentBox(index); }}>
+                  <button className="button is-info is-inverted" onClick={() => { toggleSubCommentBox(tIndex); }}>
                     <span>Reply</span>
                   </button>
                 </p>
-                {commentBoxOpen[index] && (
+                {commentBoxOpen[tIndex] && (
                   <CommentBox blogId={Number.parseInt(blogId)} parentCommentId={comment.id} />
                 )}
               </>
