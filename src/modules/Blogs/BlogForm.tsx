@@ -1,5 +1,17 @@
+import { useRef, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
+import '@mdxeditor/editor/style.css';
+import {
+  MDXEditor, MDXEditorMethods,
+  Separator, thematicBreakPlugin, InsertThematicBreak,
+  headingsPlugin, listsPlugin, quotePlugin, BlockTypeSelect, ListsToggle,
+  CodeToggle, codeBlockPlugin, SandpackConfig, ConditionalContents, sandpackPlugin, codeMirrorPlugin, ChangeCodeMirrorLanguage,
+  ShowSandpackInfo, InsertCodeBlock, InsertSandpack,
+  tablePlugin, InsertTable, CreateLink, linkPlugin, linkDialogPlugin,
+  UndoRedo, BoldItalicUnderlineToggles, toolbarPlugin,
+  diffSourcePlugin, DiffSourceToggleWrapper
+} from '@mdxeditor/editor';
 import { db } from '../../shared/db';
 
 export default function BlogForm() {
@@ -29,6 +41,7 @@ export default function BlogForm() {
     try {
       // TODO：add author
       data.publishedDate = new Date();
+      data.content = contentRef.current?.getMarkdown();
       const id = await db.blogs.add(data);
       navigate('/blogs');
     } catch (error) {
@@ -70,6 +83,32 @@ export default function BlogForm() {
   };
 
   //console.log(watch('example')); // watch input value by passing the name of it
+  const contentRef = useRef<MDXEditorMethods>(null);
+  const defaultSnippetContent = `
+export default function App() {
+  return (
+    <div className="App">
+      <h1>Hello CodeSandbox</h1>
+      <h2>Start editing to see some magic happen!</h2>
+    </div>
+  );
+}
+`.trim();
+  const simpleSandpackConfig: SandpackConfig = {
+    defaultPreset: 'react',
+    presets: [
+      {
+        label: 'React',
+        name: 'react',
+        meta: 'live react',
+        sandpackTemplate: 'react',
+        sandpackTheme: 'light',
+        snippetFileName: '/App.js',
+        snippetLanguage: 'jsx',
+        initialSnippetContent: defaultSnippetContent
+      },
+    ]
+  };
 
   return (
     /* "handleSubmit" will validate your inputs before invoking "onSubmit" */
@@ -78,11 +117,13 @@ export default function BlogForm() {
         <label className="label">Name</label>
         <div className="control">
           {/* register your input into the hook by invoking the "register" function */}
+          {/* include validation with required or other standard HTML validation rules */}
           <input
             className="input"
             type="text"
             {...register('title', { required: true })}
           />
+          {/* errors will return when field validation fails  */}
           {errors.content && <span>This field is required</span>}
         </div>
       </div>
@@ -95,12 +136,56 @@ export default function BlogForm() {
       <div className="field">
         <label className="label">Content</label>
         <div className="control">
-          {/* include validation with required or other standard HTML validation rules */}
-          <textarea
-            className="textarea"
-            {...register('content', { required: true })}
+          <MDXEditor
+            ref={contentRef}
+            markdown={``}
+            contentEditableClassName="prose"
+            plugins={[
+              headingsPlugin(),
+              quotePlugin(),
+              listsPlugin(),
+              tablePlugin(),
+              thematicBreakPlugin(),
+              linkPlugin(),
+              linkDialogPlugin(),
+              codeBlockPlugin({ defaultCodeBlockLanguage: 'js' }),
+              sandpackPlugin({ sandpackConfig: simpleSandpackConfig }),
+              codeMirrorPlugin({ codeBlockLanguages: { js: 'JavaScript', css: 'CSS' } }),
+              diffSourcePlugin({ diffMarkdown: ``, viewMode: 'rich-text' }),
+              toolbarPlugin({
+                toolbarContents: () => (
+                  <DiffSourceToggleWrapper>
+                    <UndoRedo />
+                    <Separator />
+                    <BoldItalicUnderlineToggles />
+                    <CodeToggle />
+                    <Separator />
+                    <ListsToggle />
+                    <Separator />
+                    <BlockTypeSelect />
+                    <Separator />
+                    <CreateLink />
+                    <Separator />
+                    <InsertTable />
+                    <InsertThematicBreak />
+                    <Separator />
+                    <ConditionalContents
+                      options={[
+                        { when: (editor) => editor?.editorType === 'codeblock', contents: () => <ChangeCodeMirrorLanguage /> },
+                        { when: (editor) => editor?.editorType === 'sandpack', contents: () => <ShowSandpackInfo /> },
+                        {
+                          fallback: () => (<>
+                            <InsertCodeBlock />
+                            <InsertSandpack />
+                          </>)
+                        }
+                      ]}
+                    />
+                  </DiffSourceToggleWrapper>
+                )
+              })
+            ]}
           />
-          {/* errors will return when field validation fails  */}
           {errors.content && <span>This field is required</span>}
         </div>
       </div>
