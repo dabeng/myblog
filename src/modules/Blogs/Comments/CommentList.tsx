@@ -118,7 +118,7 @@ export default function CommentList({ blogId }) {
                 <div className="is-flex is-justify-content-space-between">
                   <span className="comment-author is-size-5">Author</span>
                   <p className="buttons">
-                    <button className="button is-info is-inverted" onClick={() => { toggleToplevelCommentCollapsed(tIndex); }}>
+                    <button className="button is-info is-inverted" title={commentCollapsed[tIndex][0] ? "Expand" : "Collapse"} onClick={() => { toggleToplevelCommentCollapsed(tIndex); }}>
                       <span className="icon">
                         <i className={classNames({
                           "fa-solid": true,
@@ -127,7 +127,7 @@ export default function CommentList({ blogId }) {
                         })}></i>
                       </span>
                     </button>
-                    <button className="button is-info is-inverted">
+                    <button className="button is-info is-inverted" title="Flag as inappropriate">
                       <span className="icon">
                         <i className="fa-solid fa-flag"></i>
                       </span>
@@ -177,7 +177,7 @@ export default function CommentList({ blogId }) {
                           <div className="is-flex is-justify-content-space-between">
                             <span className="comment-author is-size-5">Author</span>
                             <p className="buttons">
-                              <button className="button is-info is-inverted" onClick={() => { toggleSecondlevelCommentCollapsed(tIndex, sIndex); }}>
+                              <button className="button is-info is-inverted" title={commentCollapsed[tIndex][1][sIndex] ? "Expand" : "Collapse"} onClick={() => { toggleSecondlevelCommentCollapsed(tIndex, sIndex); }}>
                                 <span className="icon">
                                   <i className={classNames({
                                     "fa-solid": true,
@@ -186,7 +186,7 @@ export default function CommentList({ blogId }) {
                                   })}></i>
                                 </span>
                               </button>
-                              <button className="button is-info is-inverted">
+                              <button className="button is-info is-inverted" title="Flag as inappropriate">
                                 <span className="icon">
                                   <i className="fa-solid fa-flag"></i>
                                 </span>
