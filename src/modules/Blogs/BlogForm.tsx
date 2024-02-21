@@ -1,4 +1,4 @@
-import { useRef, useEffect } from 'react';
+import { useRef, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useForm } from 'react-hook-form';
 import '@mdxeditor/editor/style.css';
@@ -17,14 +17,19 @@ import { db } from '../../shared/db';
 export default function BlogForm() {
   const { id } = useParams();
   const navigate = useNavigate();
-
+  const [contentInitVal, setContentInitVal] = useState(undefined);
   const getBlogById = async () => {
-    return id ?
-      await db.blogs
+    if (id) {
+      const blog = await db.blogs
         .where('id')
         .equals(Number.parseInt(id))
-        .first()
-      : null;
+        .first();
+      setContentInitVal(blog.content);
+      return blog;
+    } else {
+      setContentInitVal(``);
+      return null;
+    }
   };
 
   const {
@@ -36,6 +41,11 @@ export default function BlogForm() {
   } = useForm({
     defaultValues: getBlogById
   });
+
+  let isContentChanged = false;
+  const onContentChange = () => {
+    isContentChanged = true;
+  };
 
   const addBlog = async (data) => {
     try {
@@ -51,7 +61,8 @@ export default function BlogForm() {
 
   const updateBlog = async (data) => {
     try {
-      if (Object.keys(dirtyFields).length === 0) {
+      // 这里对react hook form控制下的字段和MDXEditor提供的字段，分别甄别是否被改动
+      if (Object.keys(dirtyFields).length === 0 && !isContentChanged) {
         return;
       }
       const updatedData = {};
@@ -59,6 +70,7 @@ export default function BlogForm() {
         updatedData[key] = data[key];
       }
       updatedData['updatedDate'] = new Date();
+      updatedData['content'] = contentRef.current?.getMarkdown();
       await db.blogs.update(Number.parseInt(id), { ...updatedData });
       navigate('/blogs');
     } catch (error) {
@@ -82,7 +94,6 @@ export default function BlogForm() {
     navigate('/blogs');
   };
 
-  //console.log(watch('example')); // watch input value by passing the name of it
   const contentRef = useRef<MDXEditorMethods>(null);
   const defaultSnippetContent = `
 export default function App() {
@@ -136,56 +147,59 @@ export default function App() {
       <div className="field">
         <label className="label">Content</label>
         <div className="control">
-          <MDXEditor
-            ref={contentRef}
-            markdown={``}
-            contentEditableClassName="prose"
-            plugins={[
-              headingsPlugin(),
-              quotePlugin(),
-              listsPlugin(),
-              tablePlugin(),
-              thematicBreakPlugin(),
-              linkPlugin(),
-              linkDialogPlugin(),
-              codeBlockPlugin({ defaultCodeBlockLanguage: 'js' }),
-              sandpackPlugin({ sandpackConfig: simpleSandpackConfig }),
-              codeMirrorPlugin({ codeBlockLanguages: { js: 'JavaScript', css: 'CSS' } }),
-              diffSourcePlugin({ diffMarkdown: ``, viewMode: 'rich-text' }),
-              toolbarPlugin({
-                toolbarContents: () => (
-                  <DiffSourceToggleWrapper>
-                    <UndoRedo />
-                    <Separator />
-                    <BoldItalicUnderlineToggles />
-                    <CodeToggle />
-                    <Separator />
-                    <ListsToggle />
-                    <Separator />
-                    <BlockTypeSelect />
-                    <Separator />
-                    <CreateLink />
-                    <Separator />
-                    <InsertTable />
-                    <InsertThematicBreak />
-                    <Separator />
-                    <ConditionalContents
-                      options={[
-                        { when: (editor) => editor?.editorType === 'codeblock', contents: () => <ChangeCodeMirrorLanguage /> },
-                        { when: (editor) => editor?.editorType === 'sandpack', contents: () => <ShowSandpackInfo /> },
-                        {
-                          fallback: () => (<>
-                            <InsertCodeBlock />
-                            <InsertSandpack />
-                          </>)
-                        }
-                      ]}
-                    />
-                  </DiffSourceToggleWrapper>
-                )
-              })
-            ]}
-          />
+          {contentInitVal !== undefined &&
+            <MDXEditor
+              ref={contentRef}
+              onChange={onContentChange}
+              markdown={contentInitVal}
+              contentEditableClassName="prose"
+              plugins={[
+                headingsPlugin(),
+                quotePlugin(),
+                listsPlugin(),
+                tablePlugin(),
+                thematicBreakPlugin(),
+                linkPlugin(),
+                linkDialogPlugin(),
+                codeBlockPlugin({ defaultCodeBlockLanguage: 'js' }),
+                sandpackPlugin({ sandpackConfig: simpleSandpackConfig }),
+                codeMirrorPlugin({ codeBlockLanguages: { js: 'JavaScript', css: 'CSS' } }),
+                diffSourcePlugin({ diffMarkdown: contentInitVal, viewMode: 'rich-text' }),
+                toolbarPlugin({
+                  toolbarContents: () => (
+                    <DiffSourceToggleWrapper>
+                      <UndoRedo />
+                      <Separator />
+                      <BoldItalicUnderlineToggles />
+                      <CodeToggle />
+                      <Separator />
+                      <ListsToggle />
+                      <Separator />
+                      <BlockTypeSelect />
+                      <Separator />
+                      <CreateLink />
+                      <Separator />
+                      <InsertTable />
+                      <InsertThematicBreak />
+                      <Separator />
+                      <ConditionalContents
+                        options={[
+                          { when: (editor) => editor?.editorType === 'codeblock', contents: () => <ChangeCodeMirrorLanguage /> },
+                          { when: (editor) => editor?.editorType === 'sandpack', contents: () => <ShowSandpackInfo /> },
+                          {
+                            fallback: () => (<>
+                              <InsertCodeBlock />
+                              <InsertSandpack />
+                            </>)
+                          }
+                        ]}
+                      />
+                    </DiffSourceToggleWrapper>
+                  )
+                })
+              ]}
+            />
+          }
           {errors.content && <span>This field is required</span>}
         </div>
       </div>
