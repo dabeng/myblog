@@ -87,7 +87,8 @@ export default function BlogForm() {
   };
 
   const resetForm = () => {
-    reset();
+    reset(); // 这个是恢复react hook form字段到初值
+    contentRef.current?.setMarkdown(contentInitVal); // 单独处理MEDEditor形式的content字段，恢复到初值
   };
 
   const cancelForm = () => {
