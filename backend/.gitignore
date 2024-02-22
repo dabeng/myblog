@@ -1,6 +1,3 @@
-node_modules
-
-# The following code snippets come from the backend app based on NestJS
 # compiled output
 /dist
 /node_modules
