@@ -1,6 +1,11 @@
 import { useState, useEffect } from "react";
 import classNames from 'classnames';
 
+/* total代表条目总数
+*  pageSize代表一页展示多少条目
+*  visibleSize代表展示多少个页码数；设计思路是：没有条目时，只显示灰色不可用的首页、前一页、后一页、末页
+*  不显示页码；条目大于0页，小于5页时，只显示够用的页码；大于5页时，只显示固定的5个页码
+*/
 export default function Pagination({ total, pageSize = 4, visibleSize = 5, onChange }) {
   const [currentPage, setCurrentPage] = useState(1);
   let lastPage = Math.ceil(total / pageSize);
