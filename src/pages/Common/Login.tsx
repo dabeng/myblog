@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../../shared/providers/AuthProvider";
+import { useAuth } from "../../modules/Auth";
 import { useForm } from "react-hook-form";
 
 const Login = () => {
@@ -11,9 +11,6 @@ const Login = () => {
     navigate("/", { replace: true });
   };
 
-  setTimeout(() => {
-    handleLogin();
-  }, 3 * 1000);
 
   const { register, handleSubmit } = useForm();
   const onSubmit = (data) => alert(JSON.stringify(data));

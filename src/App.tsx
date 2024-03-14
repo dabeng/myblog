@@ -1,6 +1,5 @@
 import { Routes, Route } from 'react-router-dom';
-import AuthProvider from './shared/providers/AuthProvider';
-import ProtectedRoute from './shared/routes';
+import { AuthProvider, ProtectedRoute } from './modules/Auth';
 import { Layout } from './components';
 import {Home, Login, Logout, NotFound } from './pages';
 import BlogsRoutes from './modules/Blogs/Blogs.routes';

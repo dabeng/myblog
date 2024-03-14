@@ -1,5 +1,5 @@
 import { Navigate, Outlet } from 'react-router-dom';
-import { useAuth } from './providers';
+import { useAuth } from './AuthProvider';
 
 // The ProtectedRoute component will serve as a wrapper for our authenticated routes
 const ProtectedRoute = ({children}) => {
