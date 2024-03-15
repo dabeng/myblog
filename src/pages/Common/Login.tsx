@@ -1,22 +1,30 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 import { useAuth } from "../../modules/auth";
 import { useForm } from "react-hook-form";
+import { AuthService } from "../../modules/auth/index";
 
 const Login = () => {
-  const { setToken } = useAuth();
+  const { setAuth } = useAuth();
+  const {state} = useLocation();
   const navigate = useNavigate();
 
-  const handleLogin = () => {
-    setToken("this is a test token");
-    navigate("/", { replace: true });
-  };
+  // const handleLogin = () => {
+  //   setToken("this is a test token");
+  //   navigate("/", { replace: true });
+  // };
 
 
   const { register, handleSubmit } = useForm();
-  const onSubmit = (data) => alert(JSON.stringify(data));
+  const handleLogin = (data) => {
+    AuthService.login(data.username, data.password)
+      .then((data) => {
+        setAuth(data);
+        navigate(state.from, { replace: true });
+      })
+  };
 
   return (
-    <form onSubmit={handleSubmit(onSubmit)}>
+    <form onSubmit={handleSubmit(handleLogin)}>
       <div className="field">
         <label className="label">Username</label>
         <div className="control">
