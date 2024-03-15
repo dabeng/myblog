@@ -1,10 +1,10 @@
 import { Routes, Route } from 'react-router-dom';
-import BlogList from '../../pages/Blogs/BlogList';
-import SingleBlog from '../../pages/Blogs/SingleBlog';
-import CreateBlog from '../../pages/Blogs/CreateBlog';
-import EditBlog from '../../pages/Blogs/EditBlog';
+import BlogList from '../../pages/blogs/BlogList';
+import SingleBlog from '../../pages/blogs/SingleBlog';
+import CreateBlog from '../../pages/blogs/CreateBlog';
+import EditBlog from '../../pages/blogs/EditBlog';
 // import BlogsLayout from './BlogsLayout';
-import NotFound from '../../pages/Common/NotFound';
+import NotFound from '../../pages/common/NotFound';
 
 export default function PostsRoutes() {
   return (

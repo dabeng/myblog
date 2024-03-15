@@ -1,8 +1,8 @@
 import { Routes, Route } from 'react-router-dom';
-import { AuthProvider, ProtectedRoute } from './modules/Auth';
+import { AuthProvider, ProtectedRoute } from './modules/auth';
 import { Layout } from './components';
 import {Home, Login, Logout, NotFound } from './pages';
-import BlogsRoutes from './modules/Blogs/Blogs.routes';
+import BlogsRoutes from './modules/blogs/Blogs.routes';
 
 import 'bulma/css/bulma.min.css';
 import '@fortawesome/fontawesome-free/css/all.min.css';

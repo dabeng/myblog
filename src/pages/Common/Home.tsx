@@ -1,4 +1,4 @@
-import { TagList, MonthList } from '../../modules/Home';
+import { TagList, MonthList } from '../../modules/home';
 
 export default function HomePage() {
   return (

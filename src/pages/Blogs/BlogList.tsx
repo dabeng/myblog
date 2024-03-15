@@ -1,4 +1,4 @@
-import { BlogListToolbar, OnePageBlogs } from '../../modules/Blogs';
+import { BlogListToolbar, OnePageBlogs } from '../../modules/blogs';
 
 export default function BlogList() {
   return (

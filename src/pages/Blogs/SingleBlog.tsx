@@ -1,9 +1,9 @@
-import { BlogArticle } from '../../modules/Blogs';
+import { BlogArticle } from '../../modules/blogs';
 import {
   CommentBox,
   CommentList,
   Reactions,
-} from '../../modules/Blogs/Comments';
+} from '../../modules/blogs/Comments';
 import { useParams } from 'react-router-dom';
 
 export default function SingleBlog() {

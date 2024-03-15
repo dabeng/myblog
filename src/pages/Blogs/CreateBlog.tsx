@@ -1,4 +1,4 @@
-import { BlogForm } from '../../modules/Blogs';
+import { BlogForm } from '../../modules/blogs';
 
 export default function CreateBlog() {
   return (
