@@ -5,7 +5,7 @@ import { AuthService } from "../../modules/auth/index";
 
 const Login = () => {
   const { setAuth } = useAuth();
-  const {state} = useLocation();
+  const location = useLocation();
   const navigate = useNavigate();
 
   // const handleLogin = () => {
@@ -19,7 +19,7 @@ const Login = () => {
     AuthService.login(data.username, data.password)
       .then((data) => {
         setAuth(data);
-        navigate(state.from, { replace: true });
+        navigate(location.state.from, { replace: true });
       })
   };
 

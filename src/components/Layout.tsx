@@ -2,6 +2,7 @@ import { Outlet, NavLink } from 'react-router-dom';
 import Modal from './Modal';
 import Notification from './Notification';
 import { useBoundStore } from '../shared/stores/useBoundStore';
+import { useAuth } from "../modules/auth";
 import logo from '../assets/logo.svg';
 
 export default function Layout() {
@@ -12,6 +13,7 @@ export default function Layout() {
   const modalContent = useBoundStore((state) => state.modalContent);
   const modalOKHandler = useBoundStore((state) => state.modalOKHandler);
   const modalCancelHandler = useBoundStore((state) => state.modalCancelHandler);
+  const { name } = useAuth();
 
   return (
     <>
@@ -67,6 +69,7 @@ export default function Layout() {
                   <div className="buttons">
                     <a className="button is-primary">Sign up</a>
                     <a className="button is-light">Log in</a>
+                    <a className="button is-white">{name}</a>
                   </div>
                 </div>
               </div>
