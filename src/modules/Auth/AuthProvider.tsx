@@ -12,19 +12,27 @@ const authReducer = (state, action) => {
   switch (action.type) {
     case ACTIONS.setAuth:
       // Set the authentication token in axios headers and local storage
-      axios.defaults.headers.common["Authorization"] = "Bearer " + action.payload;
-      localStorage.setItem("token", action.payload);
+      axios.defaults.headers.common.Authorization = `Bearer ${action.payload.accessToken}`;
+      // localStorage.setItem("token", action.payload);
 
       // Update the state with the new token
-      return { ...state, token: action.payload };
+      return action.payload;
 
     case ACTIONS.clearAuth:
       // Clear the authentication token from axios headers and local storage
-      delete axios.defaults.headers.common["Authorization"];
-      localStorage.removeItem("token");
+      delete axios.defaults.headers.common.Authorization;
+      // localStorage.removeItem("token");
 
       // Update the state by removing the token
-      return { ...state, token: null };
+      return {
+        accessToken: "",
+        refreshToken: "",
+        id: "",
+        name: "",
+        username: "",
+        email: "",
+        roles: []
+      };
 
     // Handle other actions (if any)
 
@@ -55,9 +63,9 @@ const AuthProvider = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
   // Function to set the authentication token
-  const setAuth = (newToken) => {
+  const setAuth = (newAuth) => {
     // Dispatch the setToken action to update the state
-    dispatch({ type: ACTIONS.setAuth, payload: newToken });
+    dispatch({ type: ACTIONS.setAuth, payload: newAuth });
   };
 
   // Function to clear the authentication token
