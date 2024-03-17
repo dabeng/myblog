@@ -13,7 +13,7 @@ export default function Layout() {
   const modalContent = useBoundStore((state) => state.modalContent);
   const modalOKHandler = useBoundStore((state) => state.modalOKHandler);
   const modalCancelHandler = useBoundStore((state) => state.modalCancelHandler);
-  const { name } = useAuth();
+  const { accessToken, id, name, username, email, roles } = useAuth();
 
   return (
     <>
@@ -68,8 +68,11 @@ export default function Layout() {
                 <div className="navbar-item">
                   <div className="buttons">
                     <a className="button is-primary">Sign up</a>
-                    <a className="button is-light">Log in</a>
-                    <a className="button is-white">{name}</a>
+                    {accessToken && <a className="button is-primary">
+                      <span className="icon">
+                        <i className="fa-solid fa-circle-user fa-3x"></i>
+                      </span>
+                    </a>}
                   </div>
                 </div>
               </div>
