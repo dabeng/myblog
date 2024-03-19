@@ -68,13 +68,30 @@ export default function Layout() {
                 <div className="navbar-item">
                   <div className="buttons">
                     <a className="button is-primary">Sign up</a>
-                    {accessToken && <a className="button is-primary">
-                      <span className="icon">
-                        <i className="fa-solid fa-circle-user fa-3x"></i>
-                      </span>
-                    </a>}
                   </div>
                 </div>
+                {accessToken && <div className="navbar-item has-dropdown is-hoverable">
+                  <a className="navbar-link">
+                    <span className="icon">
+                      <i className="fa-solid fa-circle-user fa-3x"></i>
+                    </span>
+                  </a>
+
+                  <div className="navbar-dropdown is-right">
+                    <div className="navbar-item">
+                      <p>{name}</p>
+                      <p>{username}</p>
+                    </div>
+                    <hr className="navbar-divider" />
+                    <a className="navbar-item">
+                      Your Profile
+                    </a>
+                    <hr className="navbar-divider" />
+                    <div className="navbar-item">
+                      Log Out
+                    </div>
+                  </div>
+                </div>}
               </div>
             </div>
           </nav>
@@ -95,8 +112,8 @@ export default function Layout() {
           </p>
         </div>
       </footer>
-      <Notification isActive={isNotificationActive} content={notificationContent} onCancel={notificationCancelHandler}/>
-      <Modal isActive={isModalActive} content={modalContent} onOk={modalOKHandler} onCancel={modalCancelHandler}/>
+      <Notification isActive={isNotificationActive} content={notificationContent} onCancel={notificationCancelHandler} />
+      <Modal isActive={isModalActive} content={modalContent} onOk={modalOKHandler} onCancel={modalCancelHandler} />
     </>
   );
 }

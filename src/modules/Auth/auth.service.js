@@ -2,17 +2,14 @@ import axios from "axios";
 
 const API_URL = "http://localhost:3001/auth/";
 
-const register = (username, email, password) => {
-  return axios.post(API_URL + "signup", {
-    username,
-    email,
-    password,
-  });
+const signup = (data) => {
+  data.roles = ['user'];
+  return axios.post(API_URL + 'signup', data);
 };
 
 const login = (username, password) => {
   return axios
-    .post(API_URL + "signin", {
+    .post(API_URL + 'signin', {
       username,
       password,
     })
@@ -22,7 +19,7 @@ const login = (username, password) => {
 };
 
 const logout = () => {
-  localStorage.removeItem("user");
+  return axios.post(API_URL + 'logout');
 };
 
 const getCurrentUser = () => {
@@ -30,7 +27,7 @@ const getCurrentUser = () => {
 };
 
 const AuthService = {
-  register,
+  signup,
   login,
   logout,
   getCurrentUser,

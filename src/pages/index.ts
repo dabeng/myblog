@@ -1,4 +1,4 @@
 import {BlogList, CreateBlog, EditBlog, SingleBlog} from './blogs';
-import {Home, NotFound, Login, Logout} from './common';
+import {Home, NotFound, Login, SignUp, Profile} from './common';
 
-export { BlogList, CreateBlog, EditBlog, SingleBlog, Home, Login, Logout, NotFound };
+export { BlogList, CreateBlog, EditBlog, SingleBlog, Home, Login, SignUp, Profile, NotFound };

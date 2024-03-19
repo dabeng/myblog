@@ -10,12 +10,6 @@ const Login = () => {
   const location = useLocation();
   const navigate = useNavigate();
 
-  // const handleLogin = () => {
-  //   setToken("this is a test token");
-  //   navigate("/", { replace: true });
-  // };
-
-
   const { register, handleSubmit, formState: { errors } } = useForm();
   const handleLogin = (data) => {
     AuthService.login(data.username, data.password)
@@ -59,7 +53,6 @@ const Login = () => {
         </form>
       </div>
     </div>
-
   );
 };
 
