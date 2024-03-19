@@ -19,7 +19,7 @@ const login = (username, password) => {
 };
 
 const logout = () => {
-  return axios.post(API_URL + 'logout');
+  return axios.get(API_URL + 'logout');
 };
 
 const getCurrentUser = () => {

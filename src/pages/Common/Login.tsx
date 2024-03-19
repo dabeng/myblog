@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import { useAuth } from "../../modules/auth";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
-import { AuthService } from "../../modules/auth/index";
+import { AuthService } from "../../modules/auth";
 
 const Login = () => {
   const { setAuth } = useAuth();
@@ -17,6 +17,12 @@ const Login = () => {
         setAuth(data);
         navigate(location.state.from, { replace: true });
       })
+      .catch((error) => {
+
+      })
+      .finally(()=> {
+
+      });
   };
 
   return (

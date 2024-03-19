@@ -1,8 +1,8 @@
-import { Outlet, NavLink } from 'react-router-dom';
+import { Outlet, NavLink, useNavigate } from 'react-router-dom';
 import Modal from './Modal';
 import Notification from './Notification';
 import { useBoundStore } from '../shared/stores/useBoundStore';
-import { useAuth } from "../modules/auth";
+import { useAuth, AuthService } from "../modules/auth";
 import logo from '../assets/logo.svg';
 
 export default function Layout() {
@@ -13,7 +13,22 @@ export default function Layout() {
   const modalContent = useBoundStore((state) => state.modalContent);
   const modalOKHandler = useBoundStore((state) => state.modalOKHandler);
   const modalCancelHandler = useBoundStore((state) => state.modalCancelHandler);
-  const { accessToken, id, name, username, email, roles } = useAuth();
+  const { accessToken, id, name, username, email, roles, clearAuth } = useAuth();
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    AuthService.logout()
+      .then((data) => {
+        clearAuth();
+        navigate('/', { replace: true });
+      })
+      .catch((error) => {
+
+      })
+      .finally(()=> {
+
+      });
+  };
 
   return (
     <>
@@ -76,7 +91,6 @@ export default function Layout() {
                       <i className="fa-solid fa-circle-user fa-3x"></i>
                     </span>
                   </a>
-
                   <div className="navbar-dropdown is-right">
                     <div className="navbar-item">
                       <p>{name}</p>
@@ -87,9 +101,9 @@ export default function Layout() {
                       Your Profile
                     </a>
                     <hr className="navbar-divider" />
-                    <div className="navbar-item">
+                    <a className="navbar-item" onClick={handleLogout}>
                       Log Out
-                    </div>
+                    </a>
                   </div>
                 </div>}
               </div>
