@@ -1,32 +1,34 @@
+import { useEffect, useState } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
 import classNames from 'classnames';
 import { useAuth } from "../../modules/auth";
 import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
-import { AuthService } from "../../modules/auth/index";
+import { UserService } from "../../modules/profile";
 
-const ProfileForm = () => {
+const ProfileForm = ({userId}) => {
   const { setAuth } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
 
-  const { register, handleSubmit, formState: { errors } } = useForm();
-  const handleSignup = (data) => {
-    AuthService.signup(data)
+  const { register, handleSubmit, formState: { errors } } = useForm({
+    defaultValues: async () => UserService.getUser(userId)
+  });
+  const updateProfile = (data) => {
+    UserService.updateUser(data)
       .then((data) => {
-        setAuth(data);
-        navigate('/profile', { replace: true });
+        // TODO: show notification to diaplay succeed
       })
       .catch(error => {
-        console.log('Registration failed: ', error);
+        console.log("Update user's profile failed: ", error);
       })
       .finally(() => {
-
+        // TODO: close loading spinner
       });
   };
 
   return (
-    <form onSubmit={handleSubmit(handleSignup)}>
+    <form onSubmit={handleSubmit(updateProfile)}>
       <div className="field">
         <label className="label">Full Name123</label>
         <div className="control">
@@ -70,7 +72,7 @@ const ProfileForm = () => {
       <div className="field">
         <p className="control">
           <button className="button is-link" type="submit">
-            Sign Up
+            Update
           </button>
         </p>
       </div>

@@ -15,7 +15,7 @@ const SignUpForm = () => {
     AuthService.signup(data)
       .then((data) => {
         setAuth(data);
-        navigate('/profile', { replace: true });
+        navigate(`/profile/${data.id}`, { replace: true });
       })
       .catch(error => {
         // TODO: show notification
