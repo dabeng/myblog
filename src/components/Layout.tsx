@@ -25,7 +25,7 @@ export default function Layout() {
       .catch((error) => {
 
       })
-      .finally(()=> {
+      .finally(() => {
 
       });
   };
@@ -80,11 +80,14 @@ export default function Layout() {
               </div>
 
               <div className="navbar-end">
-                <div className="navbar-item">
-                  <div className="buttons">
-                    <a className="button is-primary">Sign up</a>
-                  </div>
-                </div>
+                <NavLink
+                  to="signup/"
+                  className={({ isActive }) =>
+                    ['navbar-item', isActive ? 'is-active' : ''].join(' ')
+                  }
+                >
+                  Sign up
+                </NavLink>
                 {accessToken && <div className="navbar-item has-dropdown is-hoverable">
                   <a className="navbar-link">
                     <span className="icon">
