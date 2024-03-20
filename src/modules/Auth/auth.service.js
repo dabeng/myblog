@@ -4,7 +4,10 @@ const API_URL = "http://localhost:3001/auth/";
 
 const signup = (data) => {
   data.roles = ['user'];
-  return axios.post(API_URL + 'signup', data);
+  return axios.post(API_URL + 'signup', data)
+    .then((response) => {
+      return response.data;
+    });
 };
 
 const login = (username, password) => {
@@ -22,15 +25,10 @@ const logout = () => {
   return axios.get(API_URL + 'logout');
 };
 
-const getCurrentUser = () => {
-  return JSON.parse(localStorage.getItem("user"));
-};
-
 const AuthService = {
   signup,
   login,
   logout,
-  getCurrentUser,
 };
 
 export default AuthService;

@@ -51,7 +51,7 @@ const Login = () => {
           </div>
           <div className="field">
             <p className="control">
-              <button className="button is-info" type="submit">
+              <button className="button is-link" type="submit">
                 Login
               </button>
             </p>
