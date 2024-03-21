@@ -10,7 +10,7 @@ const getUser = (userId) => {
 };
 
 const updateUser = (data) => {
-  return axios.patch(API_URL + data.id, data)
+  return axios.patch(API_URL + data._id, data)
   .then((response) => {
     return response.data;
   });

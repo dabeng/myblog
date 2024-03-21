@@ -5,11 +5,9 @@ export default function Profile() {
   const { id } = useParams();
 
   return (
-    <div className="columns is-mobile">
+    <div className="columns is-mobile box mt-1">
       <div className="column is-half is-offset-one-quarter">
-        <div className="box">
           <ProfileForm userId={id} />
-        </div>
       </div>
     </div>
   );

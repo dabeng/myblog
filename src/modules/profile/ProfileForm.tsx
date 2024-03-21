@@ -6,7 +6,7 @@ import { useForm } from "react-hook-form";
 import { ErrorMessage } from "@hookform/error-message";
 import { UserService } from "../../modules/profile";
 
-const ProfileForm = ({userId}) => {
+const ProfileForm = ({ userId }) => {
   const { setAuth } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
@@ -29,6 +29,12 @@ const ProfileForm = ({userId}) => {
 
   return (
     <form onSubmit={handleSubmit(updateProfile)}>
+      <div className="field">
+        <label className="label">Self Introduction</label>
+        <div className="control">
+          <textarea className="textarea" placeholder="Hi my name is . . ." {...register("self-intro")}></textarea>
+        </div>
+      </div>
       <div className="field">
         <label className="label">Full Name123</label>
         <div className="control">
