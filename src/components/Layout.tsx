@@ -1,4 +1,4 @@
-import { Outlet, NavLink, useNavigate } from 'react-router-dom';
+import { Outlet, Link, NavLink, useNavigate } from 'react-router-dom';
 import Modal from './Modal';
 import Notification from './Notification';
 import { useBoundStore } from '../shared/stores/useBoundStore';
@@ -88,27 +88,26 @@ export default function Layout() {
                 >
                   Sign up
                 </NavLink>
-                {accessToken && <div className="navbar-item has-dropdown is-hoverable">
-                  <a className="navbar-link">
-                    <span className="icon">
-                      <i className="fa-solid fa-circle-user fa-3x"></i>
-                    </span>
-                  </a>
-                  <div className="navbar-dropdown is-right">
-                    <div className="navbar-item">
-                      <p>{name}</p>
-                      <p>{username}</p>
+                {accessToken &&
+                  <div className="navbar-item has-dropdown is-hoverable" style={{ width: 120 }}>
+                    <a className="navbar-link" style={{ width: '100%' }}>
+                      <span className="icon">
+                        <i className="fa-solid fa-circle-user fa-3x"></i>
+                      </span>
+                    </a>
+                    <div className="navbar-dropdown is-right" style={{ width: 200 }}>
+                      <div className="navbar-item" style={{display: 'blcok'}}>
+                        <p className="has-text-weight-bold has-text-grey-dark is-size-5">{name}</p>
+                        <p className="is-italic has-text-grey is-size-6">{username}</p>
+                      </div>
+                      <hr className="navbar-divider" />
+                      <NavLink to={`/profile/${id}`} className={"navbar-item"}>Your Profile</NavLink>
+                      <hr className="navbar-divider" />
+                      <a className="navbar-item" onClick={handleLogout}>
+                        Log Out
+                      </a>
                     </div>
-                    <hr className="navbar-divider" />
-                    <a className="navbar-item">
-                      Your Profile
-                    </a>
-                    <hr className="navbar-divider" />
-                    <a className="navbar-item" onClick={handleLogout}>
-                      Log Out
-                    </a>
-                  </div>
-                </div>}
+                  </div>}
               </div>
             </div>
           </nav>
