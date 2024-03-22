@@ -1,0 +1,23 @@
+.navbar.is-primary .navbar-brand>a.navbar-item:hover {
+  background-color: unset!important;
+}
+
+#auth-dropdown {
+  width: 100px;
+
+  > .navbar-link {
+    width: 100%;
+  }
+
+  > .navbar-dropdown {
+    width: 200px;
+
+    .text-panel {
+      display: block;
+    }
+  }
+}
+
+.input {
+  outline: none;
+}

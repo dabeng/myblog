@@ -5,6 +5,8 @@ import { useBoundStore } from '../shared/stores/useBoundStore';
 import { useAuth, AuthService } from "../modules/auth";
 import logo from '../assets/logo.svg';
 
+import './Layout.scss';
+
 export default function Layout() {
   const isNotificationActive = useBoundStore((state) => state.isNotificationActive);
   const notificationContent = useBoundStore((state) => state.notificationContent);
@@ -43,7 +45,7 @@ export default function Layout() {
             aria-label="main navigation"
           >
             <div className="navbar-brand">
-              <a className="navbar-item" href="https://bulma.io">
+              <NavLink className="navbar-item" to="/">
                 <img
                   src={logo}
                   width="70"
@@ -56,7 +58,7 @@ export default function Layout() {
                 >
                   Dabeng's Blog
                 </p>
-              </a>
+              </NavLink>
             </div>
 
             <div className="navbar-menu">
@@ -89,14 +91,14 @@ export default function Layout() {
                   Sign up
                 </NavLink>
                 {accessToken &&
-                  <div className="navbar-item has-dropdown is-hoverable" style={{ width: 120 }}>
-                    <a className="navbar-link" style={{ width: '100%' }}>
-                      <span className="icon">
+                  <div id="auth-dropdown" className="navbar-item has-dropdown is-hoverable">
+                    <a className="navbar-link">
+                      <span className="icon ml-4">
                         <i className="fa-solid fa-circle-user fa-3x"></i>
                       </span>
                     </a>
-                    <div className="navbar-dropdown is-right" style={{ width: 200 }}>
-                      <div className="navbar-item" style={{display: 'blcok'}}>
+                    <div className="navbar-dropdown is-right">
+                      <div className="navbar-item text-panel">
                         <p className="has-text-weight-bold has-text-grey-dark is-size-5">{name}</p>
                         <p className="is-italic has-text-grey is-size-6">{username}</p>
                       </div>

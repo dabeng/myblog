@@ -69,7 +69,7 @@ const SignUpForm = () => {
         </div>
         <ErrorMessage errors={errors} name="password" as={<p className="help is-danger" />} />
       </div>
-      <div className="field">
+      <div className="field is-grouped is-grouped-right">
         <p className="control">
           <button className="button is-link" type="submit">
             Sign Up
