@@ -90,6 +90,15 @@ export default function Layout() {
                 >
                   Sign up
                 </NavLink>
+                {!accessToken &&
+                  <NavLink
+                    to="login/"
+                    className={({ isActive }) =>
+                      ['navbar-item', isActive ? 'is-active' : ''].join(' ')
+                    }
+                  >
+                    Log in
+                  </NavLink>}
                 {accessToken &&
                   <div id="auth-dropdown" className="navbar-item has-dropdown is-hoverable">
                     <a className="navbar-link">
@@ -109,7 +118,8 @@ export default function Layout() {
                         Log Out
                       </a>
                     </div>
-                  </div>}
+                  </div>
+                }
               </div>
             </div>
           </nav>
