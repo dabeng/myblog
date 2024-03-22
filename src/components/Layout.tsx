@@ -40,7 +40,7 @@ export default function Layout() {
       >
         <div className="column is-8 is-offset-2">
           <nav
-            className="navbar is-primary"
+            className="navbar is-primary mt-4"
             role="navigation"
             aria-label="main navigation"
           >
