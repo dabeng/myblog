@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { useNavigate, useLocation } from "react-router-dom";
 import classNames from 'classnames';
 import { useAuth } from "../../modules/auth";
@@ -6,6 +7,7 @@ import { ErrorMessage } from "@hookform/error-message";
 import { AuthService } from "../../modules/auth/index";
 
 const SignUpForm = () => {
+  const [passwordFieldType, setPasswordFieldType] = useState('password');
   const { setAuth } = useAuth();
   const location = useLocation();
   const navigate = useNavigate();
@@ -24,6 +26,10 @@ const SignUpForm = () => {
       .finally(() => {
 
       });
+  };
+
+  const switchPassword = () => {
+    setPasswordFieldType(type => type === 'password' ? 'input' : 'password');
   };
 
   return (
@@ -61,11 +67,18 @@ const SignUpForm = () => {
       </div>
       <div className="field">
         <label className="label">Password</label>
-        <div className="control">
+        <div className="control has-icons-right">
           <input className={classNames({
             "input": true,
             "is-danger": errors.password
-          })} type="password" {...register("password", { required: 'This field is required' })} />
+          })} type={passwordFieldType} {...register("password", { required: 'This field is required' })} />
+          <span className="icon is-small is-right" style={{color:'unset',pointerEvents: 'unset'}} onClick={switchPassword}>
+            <i className={classNames({
+            "fa-solid": true,
+            "fa-eye": passwordFieldType === "input",
+            "fa-eye-slash": passwordFieldType === "password"
+          })}></i>
+          </span>
         </div>
         <ErrorMessage errors={errors} name="password" as={<p className="help is-danger" />} />
       </div>
