@@ -86,6 +86,8 @@ const SignUpForm = () => {
               },
               validate: {
                 atLeastOneDigit: v => /(?=.*\d)/.test(v) || 'Requires at least one digit',
+                atLeastOneLetter: v => /(?=.*[a-zA-Z])/.test(v) || 'Requires at least one letter',
+                atLeastOneSpecialCharacter: v => /(?=.*[!@#$%^&*])/.test(v) || 'Requires at least one special character'
               }
             })}
           />
