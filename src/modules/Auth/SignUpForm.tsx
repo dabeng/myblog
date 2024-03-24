@@ -41,7 +41,14 @@ const SignUpForm = () => {
           <input className={classNames({
             "input": true,
             "is-danger": errors.name
-          })} type="text" {...register("name", { required: 'This field is required' })} />
+          })} type="text"
+          {...register("name", {
+            required: 'This field is required',
+            minLength: {
+              value: 4,
+              message: 'Requires a minimum length of 4 characters',
+            },
+          })} />
         </div>
         <ErrorMessage errors={errors} name="name" as={<p className="help is-danger" />} />
       </div>
@@ -51,7 +58,14 @@ const SignUpForm = () => {
           <input className={classNames({
             "input": true,
             "is-danger": errors.email
-          })} type="text" {...register("email", { required: 'This field is required' })} />
+          })} type="text" 
+          {...register("email", {
+            required: 'This field is required',
+            pattern: {
+              value: /^[^\s@]+@[^\s@]+\.[^\s@]+$/,
+              message: 'Requires valid email format',
+            },
+          })} />
         </div>
         <ErrorMessage errors={errors} name="email" as={<p className="help is-danger" />} />
       </div>
@@ -61,7 +75,14 @@ const SignUpForm = () => {
           <input className={classNames({
             "input": true,
             "is-danger": errors.username
-          })} type="text" {...register("username", { required: 'This field is required' })} />
+          })} type="text"
+          {...register("username", {
+            required: 'This field is required',
+            minLength: {
+              value: 4,
+              message: 'Requires a minimum length of 4 characters',
+            },
+          })} />
         </div>
         <ErrorMessage errors={errors} name="username" as={<p className="help is-danger" />} />
       </div>
@@ -99,15 +120,7 @@ const SignUpForm = () => {
             })}></i>
           </span>
         </div>
-        <ErrorMessage errors={errors} name="password"
-          as={<p className="help is-danger" />}
-          render={({ messages }) =>
-            messages &&
-            Object.entries(messages).map(([type, message]) => (
-              <p key={type}>{message}</p>
-            ))
-          }
-        />
+        <ErrorMessage errors={errors} name="password" as={<p className="help is-danger" />} />
       </div>
       <div className="field is-grouped is-grouped-right">
         <p className="control">
