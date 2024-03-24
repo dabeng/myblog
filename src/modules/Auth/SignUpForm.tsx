@@ -68,19 +68,44 @@ const SignUpForm = () => {
       <div className="field">
         <label className="label">Password</label>
         <div className="control has-icons-right">
-          <input className={classNames({
-            "input": true,
-            "is-danger": errors.password
-          })} type={passwordFieldType} {...register("password", { required: 'This field is required' })} />
-          <span className="icon is-small is-right" style={{color:'unset',pointerEvents: 'unset'}} onClick={switchPassword}>
+          <input
+            className={classNames({
+              "input": true,
+              "is-danger": errors.password
+            })}
+            type={passwordFieldType}
+            {...register("password", {
+              required: 'This field is required',
+              // pattern: {
+              //   value: /^(?=.*\d)(?=.*[a-z])(?=.*[A-Z])(?=.*[!@#$%^&*]).{8,}$/,
+              //   message: 'the password contains at least 1 digit, 1 lowercase letter, 1 uppercase letter, 1 special character, and is at least 8 characters long',
+              // },
+              minLength: {
+                value: 4,
+                message: 'Requires a minimum length of 4 characters',
+              },
+              validate: {
+                atLeastOneDigit: v => /(?=.*\d)/.test(v) || 'Requires at least one digit',
+              }
+            })}
+          />
+          <span className="icon is-small is-right" style={{ color: 'unset', pointerEvents: 'unset' }} onClick={switchPassword}>
             <i className={classNames({
-            "fa-solid": true,
-            "fa-eye": passwordFieldType === "input",
-            "fa-eye-slash": passwordFieldType === "password"
-          })}></i>
+              "fa-solid": true,
+              "fa-eye": passwordFieldType === "input",
+              "fa-eye-slash": passwordFieldType === "password"
+            })}></i>
           </span>
         </div>
-        <ErrorMessage errors={errors} name="password" as={<p className="help is-danger" />} />
+        <ErrorMessage errors={errors} name="password"
+          as={<p className="help is-danger" />}
+          render={({ messages }) =>
+            messages &&
+            Object.entries(messages).map(([type, message]) => (
+              <p key={type}>{message}</p>
+            ))
+          }
+        />
       </div>
       <div className="field is-grouped is-grouped-right">
         <p className="control">
