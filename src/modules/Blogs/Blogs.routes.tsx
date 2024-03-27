@@ -4,8 +4,15 @@ import CreateBlog from '../../pages/blogs/CreateBlog';
 import EditBlog from '../../pages/blogs/EditBlog';
 import NotFound from '../../pages/common/NotFound';
 
+import BlogService from "./blog.service";
+
 const BlogsRoutes = [
-  { index: true, Component: BlogList },
+  { index: true,
+    Component: BlogList,
+    loader: async () => {
+      return BlogService.getBlogs()
+    },
+  },
   { path: ":id", Component: SingleBlog },
   { path: "create", Component: CreateBlog },
   { path: "edit/:id", Component: EditBlog },

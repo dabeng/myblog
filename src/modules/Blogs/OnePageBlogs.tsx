@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { useLoaderData, Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { db } from '../../shared/db';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -22,13 +22,14 @@ export default function OnePageBlogs() {
     return true;
   };
 
-  const allBlogs = useLiveQuery(
+  /*const allBlogs = useLiveQuery(
     () => db.blogs
       .orderBy('publishedDate')
       .reverse()
       .filter(criterionFunction)
       .toArray()
-  );
+  );*/
+  const allBlogs: any = useLoaderData();
 
   // A helper function we will use below.
   // It will prevent the same results to be returned again for next page.
@@ -46,7 +47,7 @@ export default function OnePageBlogs() {
   const [onePageBlogs, setOnePageBlogs] = useState(undefined);
 
   const jumpToPage = async (n) => {
-    if (n === 1) { // Page 1
+    /*if (n === 1) { // Page 1
       const blogs = await db.blogs
         .orderBy('publishedDate')
         .reverse()
@@ -66,7 +67,7 @@ export default function OnePageBlogs() {
         .limit(PAGE_SIZE)
         .toArray();
         setOnePageBlogs(blogs);
-    }
+    }*/
   };
 
   const confirmDeleteBlog = async () => {
