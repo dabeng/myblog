@@ -47,14 +47,14 @@ export default function OnePageBlogs() {
   const [onePageBlogs, setOnePageBlogs] = useState(undefined);
 
   const jumpToPage = async (n) => {
-    /*if (n === 1) { // Page 1
-      const blogs = await db.blogs
-        .orderBy('publishedDate')
-        .reverse()
-        .filter(criterionFunction)
-        .limit(PAGE_SIZE)
-        .toArray();
-        setOnePageBlogs(blogs);
+    if (n === 1) { // Page 1
+      // const blogs = await db.blogs
+      //   .orderBy('publishedDate')
+      //   .reverse()
+      //   .filter(criterionFunction)
+      //   .limit(PAGE_SIZE)
+      //   .toArray();
+        setOnePageBlogs(allBlogs.data);
     } else { // Page n (>1)
       let previousEntry = allBlogs[(n - 1) * PAGE_SIZE - 1];
       const blogs = await db.blogs
@@ -67,7 +67,7 @@ export default function OnePageBlogs() {
         .limit(PAGE_SIZE)
         .toArray();
         setOnePageBlogs(blogs);
-    }*/
+    }
   };
 
   const confirmDeleteBlog = async () => {
@@ -148,7 +148,7 @@ export default function OnePageBlogs() {
     }
     {allBlogs &&
       <div className='py-4'>
-        <Pagination total={allBlogs.length} pageSize={PAGE_SIZE} visibleSize={5} onChange={jumpToPage} />
+        <Pagination total={allBlogs.metadata.total} pageSize={PAGE_SIZE} visibleSize={5} onChange={jumpToPage} />
       </div>
     }
   </>;

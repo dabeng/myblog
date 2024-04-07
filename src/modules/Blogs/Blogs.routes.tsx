@@ -10,7 +10,7 @@ const BlogsRoutes = [
   { index: true,
     Component: BlogList,
     loader: async () => {
-      return BlogService.getBlogs()
+      return BlogService.getBlogs();
     },
   },
   { path: ":id", Component: SingleBlog },
