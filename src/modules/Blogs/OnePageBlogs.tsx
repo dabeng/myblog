@@ -5,6 +5,7 @@ import { db } from '../../shared/db';
 import { useLiveQuery } from 'dexie-react-hooks';
 import { useBoundStore } from '../../shared/stores/useBoundStore';
 import { Pagination } from '../../components';
+import BlogService from "./blog.service";
 
 export default function OnePageBlogs() {
 
@@ -17,57 +18,26 @@ export default function OnePageBlogs() {
 
   const PAGE_SIZE = 4;
 
-  // Criterion filter in plain JS:
-  const criterionFunction = (blog) => {
-    return true;
-  };
-
-  /*const allBlogs = useLiveQuery(
-    () => db.blogs
-      .orderBy('publishedDate')
-      .reverse()
-      .filter(criterionFunction)
-      .toArray()
-  );*/
-  const allBlogs: any = useLoaderData();
-
-  // A helper function we will use below.
-  // It will prevent the same results to be returned again for next page.
-  function fastForward(lastRow, idProp, otherCriterion) {
-    let fastForwardComplete = false;
-    return item => {
-      if (fastForwardComplete) return otherCriterion(item);
-      if (item[idProp] === lastRow[idProp]) {
-        fastForwardComplete = true;
-      }
-      return false;
+  const [activePage, setActivePage] = useState(1);
+  const [onePageBlogs, setOnePageBlogs] = useState(null);
+  const [pageTotal, setPageTotal] = useState(null);
+  useEffect(() => {
+    let ignore = false;
+    setOnePageBlogs(null);
+    BlogService.getBlogs(`?page=${activePage}&page_size=${PAGE_SIZE}&sort=-publishedDate`)
+      .then(result => {
+        if (!ignore) {
+          setOnePageBlogs(result.data);
+          setPageTotal(result.metadata.total);
+        }
+      });
+    return () => {
+      ignore = true;
     };
-  }
+  }, [activePage]);
 
-  const [onePageBlogs, setOnePageBlogs] = useState(undefined);
-
-  const jumpToPage = async (n) => {
-    if (n === 1) { // Page 1
-      // const blogs = await db.blogs
-      //   .orderBy('publishedDate')
-      //   .reverse()
-      //   .filter(criterionFunction)
-      //   .limit(PAGE_SIZE)
-      //   .toArray();
-        setOnePageBlogs(allBlogs.data);
-    } else { // Page n (>1)
-      let previousEntry = allBlogs[(n - 1) * PAGE_SIZE - 1];
-      const blogs = await db.blogs
-        .orderBy('publishedDate')
-        .reverse()
-        // Use index to fast forward as much as possible
-        // This line is what makes the paging optimized
-        // Use helper function to fast forward to the exact (n - 1) result:
-        .filter(fastForward(previousEntry, 'id', criterionFunction))
-        .limit(PAGE_SIZE)
-        .toArray();
-        setOnePageBlogs(blogs);
-    }
+  const jumpToPage = (n) => {
+    setActivePage(n);
   };
 
   const confirmDeleteBlog = async () => {
@@ -103,7 +73,7 @@ export default function OnePageBlogs() {
   };
 
   return <>
-    {onePageBlogs &&
+    { onePageBlogs &&
       onePageBlogs.map((blog, index) => (
         <article
           className={classNames({
@@ -146,9 +116,9 @@ export default function OnePageBlogs() {
         </article>
       ))
     }
-    {allBlogs &&
+    {pageTotal &&
       <div className='py-4'>
-        <Pagination total={allBlogs.metadata.total} pageSize={PAGE_SIZE} visibleSize={5} onChange={jumpToPage} />
+        <Pagination total={pageTotal} pageSize={PAGE_SIZE} visibleSize={5} onChange={jumpToPage} />
       </div>
     }
   </>;

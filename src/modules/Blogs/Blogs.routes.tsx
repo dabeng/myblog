@@ -9,9 +9,9 @@ import BlogService from "./blog.service";
 const BlogsRoutes = [
   { index: true,
     Component: BlogList,
-    loader: async () => {
-      return BlogService.getBlogs();
-    },
+    // loader: async () => {
+    //   return BlogService.getBlogs();
+    // },
   },
   { path: ":id", Component: SingleBlog },
   { path: "create", Component: CreateBlog },
