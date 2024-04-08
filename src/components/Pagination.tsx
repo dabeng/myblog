@@ -87,17 +87,14 @@ export default function Pagination({ total, pageSize = 4, visibleSize = 5, onCha
                     "is-current":
                     currentPage <= Math.ceil(visibleSize / 2)
                       ? currentPage === index + 1
-                      : (currentPage > Math.ceil(visibleSize / 2) && lastPage - currentPage > Math.floor(visibleSize / 2)
-                        ? currentPage === currentPage - Math.floor(visibleSize / 2) + index
-                        : currentPage === lastPage - visibleSize + index + 1)
+                      : currentPage === lastPage - visibleSize + index + 1
                   })}
                   aria-label={"Goto page " + (index + 1)}
                   aria-current={index + 1 === currentPage ? "page" : undefined}
                   onClick={gotoPage}
                 >
                   {currentPage <= Math.ceil(visibleSize / 2) && index + 1}
-                  {currentPage > Math.ceil(visibleSize / 2) && lastPage - currentPage > Math.floor(visibleSize / 2) && currentPage - Math.floor(visibleSize / 2) + index}
-                  {lastPage - currentPage <= Math.floor(visibleSize / 2) && lastPage - visibleSize + index + 1}
+                  {currentPage > Math.ceil(visibleSize / 2) && lastPage - visibleSize + index + 1}
                 </a>
               </li>
             ))
