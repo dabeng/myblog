@@ -1,10 +1,9 @@
-import { db } from '../../../shared/db';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import classNames from 'classnames';
-import { useLiveQuery } from 'dexie-react-hooks';
 import CommentBox from './CommentBox';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
+import CommentService from "./comment.service";
 
 import './CommentList.css';
 
@@ -55,16 +54,14 @@ export default function CommentList({ blogId }) {
     setCommentCollapsed(commentCollapsedInitVal);
     return topLevel;
   };
-  const criterionFunction = (comment) => {
-    return comment.blogId === Number.parseInt(blogId);
-  };
-  const comments = useLiveQuery(
-    () => db.comments
-      .orderBy('publishedDate')
-      .reverse()
-      .filter(criterionFunction)
-      .toArray(processComments)
-  );
+
+  const [comments, setComments] = useState(null);
+  useEffect(() => {
+    CommentService.getComments(`?blogId=${blogId}`)
+      .then(result => {
+          setComments(processComments(result));
+      });
+  }, []);
 
   const [commentBoxOpen, setCommentBoxOpen] = useState([]);
   const toggleSubCommentBox = function (index) {

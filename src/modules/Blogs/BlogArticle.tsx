@@ -1,15 +1,9 @@
-import { useNavigate, useParams } from 'react-router-dom';
-import { useLiveQuery } from 'dexie-react-hooks';
-import { db } from '../../shared/db';
+import { useNavigate, useParams, useLoaderData } from 'react-router-dom';
 
 export default function BlogArticle() {
   const { id } = useParams();
-  const blog = useLiveQuery(
-    () => db.blogs
-      .where('id')
-      .equals(Number.parseInt(id))
-      .first()
-  );
+  const blog: any = useLoaderData();
+
   return (<>
     {blog &&
       <article className="box">

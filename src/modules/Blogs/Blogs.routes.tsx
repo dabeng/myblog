@@ -7,13 +7,17 @@ import NotFound from '../../pages/common/NotFound';
 import BlogService from "./blog.service";
 
 const BlogsRoutes = [
-  { index: true,
+  {
+    index: true,
     Component: BlogList,
-    // loader: async () => {
-    //   return BlogService.getBlogs();
-    // },
   },
-  { path: ":id", Component: SingleBlog },
+  {
+    path: ":id",
+    Component: SingleBlog,
+    loader: ({ params }) => {
+      return BlogService.getOneBlogById(params.id);
+    },
+  },
   { path: "create", Component: CreateBlog },
   { path: "edit/:id", Component: EditBlog },
   { path: "*", Component: NotFound },

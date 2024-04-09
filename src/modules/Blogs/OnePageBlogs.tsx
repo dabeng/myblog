@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useLoaderData, Link } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import classNames from 'classnames';
 import { db } from '../../shared/db';
 import { useLiveQuery } from 'dexie-react-hooks';
@@ -93,20 +93,20 @@ export default function OnePageBlogs() {
           </header>
           <section>
             <p className="title is-4 py-2">
-              <Link to={`/blogs/${blog.id}`}>{blog.title}</Link>
+              <Link to={`/blogs/${blog._id}`}>{blog.title}</Link>
             </p>
             <p className="subtitle is-6">
               {blog.subtitle}
             </p>
           </section>
           <footer className='is-flex is-justify-content-flex-end'>
-            <Link to={`/blogs/edit/${blog.id}`} className="button is-small is-info mr-4">
+            <Link to={`/blogs/edit/${blog._id}`} className="button is-small is-info mr-4">
               <span className="icon">
                 <i className="fa-solid fa-pencil"></i>
               </span>
               <span>Edit</span>
             </Link>
-            <button className="button is-small is-danger is-outlined" onClick={() => deleteBlog(blog.id, blog.title)}>
+            <button className="button is-small is-danger is-outlined" onClick={() => deleteBlog(blog._id, blog.title)}>
               <span className="icon">
                 <i className="fa-solid fa-trash-can"></i>
               </span>
