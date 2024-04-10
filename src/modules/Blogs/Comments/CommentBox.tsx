@@ -12,9 +12,13 @@ import {
 } from '@mdxeditor/editor';
 import { useRef, useEffect } from 'react';
 import { db } from '../../../shared/db';
+import CommentService from "./comment.service";
 import { useBoundStore } from '../../../shared/stores/useBoundStore';
+import { useAuth } from "../../auth";
 
-export default function CommentBox({blogId, parentCommentId = null}) {
+export default function CommentBox({blogId, parentCommentId = null, addSecondlevelComment = null}) {
+  const { accessToken, id, name, username, email, roles, clearAuth } = useAuth();
+
   const showNotification = useBoundStore((state) => state.showNotification);
   const hideNotification = useBoundStore((state) => state.hideNotification);
   const updateNotificationContent = useBoundStore((state) => state.updateNotificationContent);
@@ -57,7 +61,7 @@ export default function App() {
   };
 
   const onComment = async (markdown) => {
-    try {
+    /*try {
       // TODO：add author
       await db.comments.add({
         content: markdown,
@@ -68,7 +72,17 @@ export default function App() {
     } catch ({ name, message }) {
       updateNotificationContent(`${name}: ${message}`);
       showNotification();
-    }
+    }*/
+    CommentService.createComment({
+      author: id,
+      content: markdown,
+      publishedDate: new Date(),
+      blogId: blogId,
+      parentCommentId: parentCommentId
+    })
+      .then(result => {
+        addSecondlevelComment(result);
+      });
   };
 
   return (

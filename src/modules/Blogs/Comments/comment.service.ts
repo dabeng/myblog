@@ -2,6 +2,13 @@ import axios from "axios";
 
 const API_URL = "http://localhost:3001/comments/";
 
+const createComment = (data: any) => {
+  return axios.post(API_URL, data)
+    .then((response) => {
+      return response.data;
+    });
+};
+
 const getComments = (querystring: string = '') => {
   return axios.get(API_URL + querystring)
     .then((response) => {
@@ -24,6 +31,7 @@ const updateComment = (data) => {
 };
 
 const CommentService = {
+  createComment,
   getComments,
   getOneCommentById,
   updateComment,

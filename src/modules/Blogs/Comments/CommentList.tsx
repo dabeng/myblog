@@ -8,6 +8,19 @@ import CommentService from "./comment.service";
 import './CommentList.css';
 
 export default function CommentList({ blogId }) {
+  const onAddSecondlevelComment = (data) => {
+    setComments(comments.map(c => {
+      if (c._id === data.parentCommentId) {
+        if (c.subComments) {
+          c.subComments.push(data);
+        } else {
+          c.subComments = [data];
+        }
+      }
+        return c;
+    }));
+    // Do whatever you want with updated value
+  };
   const [toplevelSortField, setToplevelSortField] = useState('publishedDate');
   const [toplevelSortOrder, setToplevelSortOrder] = useState('descending');
   const [secondlevelSortField, setSecondlevelSortField] = useState('publishedDate');
@@ -32,7 +45,7 @@ export default function CommentList({ blogId }) {
     const secondLevel = rawComments.filter((c) => c.parentCommentId);
     //【2】然后second level的评论插入到top level评论的subComments属性下
     secondLevel.forEach((sc) => {
-      const parentComment = topLevel.find((tc) => tc.id === sc.parentCommentId);
+      const parentComment = topLevel.find((tc) => tc._id === sc.parentCommentId);
       if (parentComment.subComments) {
         parentComment.subComments.push(sc);
       } else {
@@ -227,7 +240,7 @@ export default function CommentList({ blogId }) {
                   </button>
                 </p>
                 {commentBoxOpen[tIndex] && (
-                  <CommentBox blogId={Number.parseInt(blogId)} parentCommentId={comment.id} />
+                  <CommentBox blogId={blogId} parentCommentId={comment._id} addSecondlevelComment={onAddSecondlevelComment} />
                 )}
               </>
             }

@@ -4,10 +4,11 @@ import {
   CommentList,
   Reactions,
 } from '../../modules/blogs/Comments';
-import { useParams } from 'react-router-dom';
+import { useParams, useLoaderData } from 'react-router-dom';
 
 export default function SingleBlog() {
   const { id } = useParams();
+  const blog: any = useLoaderData();
 
   return (
     <>
@@ -16,7 +17,7 @@ export default function SingleBlog() {
         <p className="title is-2">Comments</p>
         <Reactions />
         <CommentBox blogId={Number.parseInt(id)} />
-        <CommentList blogId={Number.parseInt(id)} />
+        <CommentList blogId={blog._id} />
       </div>
     </>
   );
