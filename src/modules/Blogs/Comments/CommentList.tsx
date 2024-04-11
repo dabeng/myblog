@@ -19,7 +19,6 @@ export default function CommentList({ blogId }) {
       }
         return c;
     }));
-    // Do whatever you want with updated value
   };
   const [toplevelSortField, setToplevelSortField] = useState('publishedDate');
   const [toplevelSortOrder, setToplevelSortOrder] = useState('descending');
@@ -72,7 +71,7 @@ export default function CommentList({ blogId }) {
   useEffect(() => {
     CommentService.getComments(`?blogId=${blogId}`)
       .then(result => {
-          setComments(processComments(result));
+          setComments(processComments(result.data));
       });
   }, []);
 
