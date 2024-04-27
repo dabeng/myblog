@@ -61,18 +61,6 @@ export default function App() {
   };
 
   const onComment = async (markdown) => {
-    /*try {
-      // TODO：add author
-      await db.comments.add({
-        content: markdown,
-        publishedDate: new Date(),
-        blogId: blogId,
-        parentCommentId: parentCommentId
-      });
-    } catch ({ name, message }) {
-      updateNotificationContent(`${name}: ${message}`);
-      showNotification();
-    }*/
     CommentService.createComment({
       author: id,
       content: markdown,
@@ -81,7 +69,9 @@ export default function App() {
       parentCommentId: parentCommentId
     })
       .then(result => {
-        addSecondlevelComment(result);
+        if (parentCommentId) {
+          addSecondlevelComment(result);
+        }
       });
   };
 
