@@ -125,7 +125,7 @@ export default function CommentList({ blogId }) {
             <div className="content">
               <header className="comment-header">
                 <div className="is-flex is-justify-content-space-between">
-                  <span className="comment-author is-size-5">Author</span>
+                  <span className="comment-author is-size-5">{comment.author.username}</span>
                   <p className="buttons">
                     <button className="button is-info is-inverted" title={commentCollapsed[tIndex][0] ? "Expand" : "Collapse"} onClick={() => { toggleToplevelCommentCollapsed(tIndex); }}>
                       <span className="icon">
@@ -184,7 +184,7 @@ export default function CommentList({ blogId }) {
                       <div className="content">
                         <header className="comment-header">
                           <div className="is-flex is-justify-content-space-between">
-                            <span className="comment-author is-size-5">Author</span>
+                            <span className="comment-author is-size-5">{subComment.author.username}</span>
                             <p className="buttons">
                               <button className="button is-info is-inverted" title={commentCollapsed[tIndex][1][sIndex] ? "Expand" : "Collapse"} onClick={() => { toggleSecondlevelCommentCollapsed(tIndex, sIndex); }}>
                                 <span className="icon">
