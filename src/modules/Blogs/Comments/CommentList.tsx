@@ -20,6 +20,7 @@ export default function CommentList({ blogId }) {
         return c;
     }));
   };
+  const [commentTotal, setCommentTotal] = useState(0);
   const [toplevelSortField, setToplevelSortField] = useState('publishedDate');
   const [toplevelSortOrder, setToplevelSortOrder] = useState('descending');
   const [secondlevelSortField, setSecondlevelSortField] = useState('publishedDate');
@@ -71,7 +72,8 @@ export default function CommentList({ blogId }) {
   useEffect(() => {
     CommentService.getComments(`?blogId=${blogId}&page_size=200`)
       .then(result => {
-          setComments(processComments(result.data));
+        setComments(processComments(result.data));
+        setCommentTotal(result.metadata.total);
       });
   }, []);
 
@@ -106,7 +108,7 @@ export default function CommentList({ blogId }) {
 
   return (
     <div>
-      <p className="title is-6 pt-6" style={{ marginBottom: "-2rem" }}>37 Comments</p>
+      <p className="title is-6 pt-6" style={{ marginBottom: "-2rem" }}>{commentTotal} Comments</p>
       <div className="tabs is-right">
         <ul>
           <li className="is-active"><a>Best</a></li>
