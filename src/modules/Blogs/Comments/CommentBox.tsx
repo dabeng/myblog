@@ -72,6 +72,9 @@ export default function App() {
         if (parentCommentId) {
           addSecondlevelComment(result);
         }
+      })
+      .finally(()=>{
+        editorRef.current?.setMarkdown(``);
       });
   };
 

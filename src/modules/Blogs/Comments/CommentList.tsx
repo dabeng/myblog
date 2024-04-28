@@ -69,7 +69,7 @@ export default function CommentList({ blogId }) {
 
   const [comments, setComments] = useState(null);
   useEffect(() => {
-    CommentService.getComments(`?blogId=${blogId}`)
+    CommentService.getComments(`?blogId=${blogId}&page_size=200`)
       .then(result => {
           setComments(processComments(result.data));
       });
@@ -117,8 +117,8 @@ export default function CommentList({ blogId }) {
       {comments?.map((comment, tIndex) => (
         <article className="media" key={tIndex}>
           <figure className="media-left">
-            <p className="image is-64x64 has-text-centered">
-              <i className="fa-solid fa-user fa-4x"></i>
+            <p className="image is-48x48 has-text-centered">
+              <i className="fa-solid fa-user fa-3x"></i>
             </p>
           </figure>
           <div className="media-content">
@@ -176,8 +176,8 @@ export default function CommentList({ blogId }) {
                 {comment?.subComments?.map((subComment, sIndex) => (
                   <article className="media" key={sIndex}>
                     <figure className="media-left">
-                      <p className="image is-48x48 has-text-centered">
-                        <i className="fa-solid fa-user fa-3x"></i>
+                      <p className="image is-32x32 has-text-centered">
+                        <i className="fa-solid fa-user fa-2x"></i>
                       </p>
                     </figure>
                     <div className="media-content">
