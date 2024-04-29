@@ -17,10 +17,11 @@ export default function CommentList({ blogId }) {
           c.subComments = [data];
         }
       }
-        return c;
+      return c;
     }));
   };
   const [commentTotal, setCommentTotal] = useState(0);
+  const [activeCommentTab, setActiveCommentTab] = useState('likesDescending');
   const [toplevelSortField, setToplevelSortField] = useState('publishedDate');
   const [toplevelSortOrder, setToplevelSortOrder] = useState('descending');
   const [secondlevelSortField, setSecondlevelSortField] = useState('publishedDate');
@@ -70,12 +71,20 @@ export default function CommentList({ blogId }) {
 
   const [comments, setComments] = useState(null);
   useEffect(() => {
-    CommentService.getComments(`?blogId=${blogId}&page_size=200`)
+    let sortParams = '';
+    if (activeCommentTab === 'likesDescending') {
+      sortParams = 'sort=-likes';
+    } else if (activeCommentTab === 'dateDescending') {
+      sortParams = 'sort=-publishedDate';
+    } else {
+      sortParams = 'sort=publishedDate';
+    }
+    CommentService.getComments(`?blogId=${blogId}&page_size=200&${sortParams}`)
       .then(result => {
         setComments(processComments(result.data));
         setCommentTotal(result.metadata.total);
       });
-  }, []);
+  }, [activeCommentTab]);
 
   const [commentBoxOpen, setCommentBoxOpen] = useState([]);
   const toggleSubCommentBox = function (index) {
@@ -106,14 +115,30 @@ export default function CommentList({ blogId }) {
     }));
   };
 
+  const sortCommentByLikes = function () {
+    setActiveCommentTab('likesDescending');
+  };
+  const sortCommentByDateDesc = function () {
+    setActiveCommentTab('dateDescending');
+  };
+  const sortCommentByDateAsc = function () {
+    setActiveCommentTab('dateAscending');
+  };
+
   return (
     <div>
       <p className="title is-6 pt-6" style={{ marginBottom: "-2rem" }}>{commentTotal} Comments</p>
       <div className="tabs is-right">
         <ul>
-          <li className="is-active"><a>Best</a></li>
-          <li><a>Newest</a></li>
-          <li><a>Oldest</a></li>
+          <li className={classNames({
+            "is-active": activeCommentTab === 'likesDescending'
+          })} onClick={sortCommentByLikes}><a>Best</a></li>
+          <li className={classNames({
+            "is-active": activeCommentTab === 'dateDescending'
+          })} onClick={sortCommentByDateDesc}><a>Newest</a></li>
+          <li className={classNames({
+            "is-active": activeCommentTab === 'dateAscending'
+          })} onClick={sortCommentByDateAsc}><a>Oldest</a></li>
         </ul>
       </div>
       {comments?.map((comment, tIndex) => (
