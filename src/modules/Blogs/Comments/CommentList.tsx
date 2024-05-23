@@ -4,10 +4,15 @@ import CommentBox from './CommentBox';
 import Markdown from 'react-markdown';
 import remarkGfm from 'remark-gfm';
 import CommentService from "./comment.service";
+import VoteService from "./vote.service";
+import { useAuth } from "../../auth";
+import { ObjectId } from 'bson';
 
 import './CommentList.css';
 
 export default function CommentList({ blogId }) {
+  const { accessToken, id, name, username, email, roles, clearAuth } = useAuth();
+
   const onAddSecondlevelComment = (data) => {
     setComments(comments.map(c => {
       if (c._id === data.parentCommentId) {
@@ -125,6 +130,38 @@ export default function CommentList({ blogId }) {
     setActiveCommentTab('dateAscending');
   };
 
+  const upvoteComment = (comment) => {
+    VoteService.createVote({
+      user: id,
+      comment: comment._id,
+      createdDate: new Date(),
+      upvote: 1,
+      downvote: 0
+    })
+      .then(result => {
+        var a =1;
+      })
+      .finally(()=>{
+
+      });
+  };
+
+  const downvoteComment = (comment) => {
+    VoteService.createVote({
+      user: id,
+      comment: comment._id,
+      createdDate: new Date(),
+      upvote: 0,
+      downvote: 1
+    })
+      .then(result => {
+        var a =1;
+      })
+      .finally(()=>{
+
+      });
+  };
+
   return (
     <div>
       <p className="title is-6 pt-6" style={{ marginBottom: "-2rem" }}>{commentTotal} Comments</p>
@@ -181,13 +218,13 @@ export default function CommentList({ blogId }) {
                   </div>
                   <footer className="comment-footer">
                     <p className="buttons">
-                      <button className="button is-info is-inverted">
+                      <button className="button is-info is-inverted" onClick={()=>{upvoteComment(comment)}}>
                         <span className="icon">
                           <i className="fa-regular fa-thumbs-up"></i>
                         </span>
                         <span className="upvote-count">0</span>
                       </button>
-                      <button className="button is-info is-inverted">
+                      <button className="button is-info is-inverted" onClick={()=>{downvoteComment(comment)}}>
                         <span className="icon">
                           <i className="fa-regular fa-thumbs-down"></i>
                         </span>
