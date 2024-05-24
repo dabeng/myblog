@@ -222,13 +222,13 @@ export default function CommentList({ blogId }) {
                         <span className="icon">
                           <i className="fa-regular fa-thumbs-up"></i>
                         </span>
-                        <span className="upvote-count">0</span>
+                        <span className="upvote-count">{comment.votes.filter(v=>v.upvote===1).length}</span>
                       </button>
                       <button className="button is-info is-inverted" onClick={()=>{downvoteComment(comment)}}>
                         <span className="icon">
                           <i className="fa-regular fa-thumbs-down"></i>
                         </span>
-                        <span className="downvote-count">0</span>
+                        <span className="downvote-count">{comment.votes.filter(v=>v.downvote===1).length}</span>
                       </button>
                     </p>
                   </footer>
