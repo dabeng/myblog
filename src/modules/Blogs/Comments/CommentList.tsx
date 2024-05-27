@@ -6,7 +6,6 @@ import remarkGfm from 'remark-gfm';
 import CommentService from "./comment.service";
 import VoteService from "./vote.service";
 import { useAuth } from "../../auth";
-import { ObjectId } from 'bson';
 
 import './CommentList.css';
 
@@ -130,32 +129,48 @@ export default function CommentList({ blogId }) {
     setActiveCommentTab('dateAscending');
   };
 
-  const upvoteComment = (comment) => {
+  const upvoteComment = (commentId, tIndex, sIndex) => {
     VoteService.createVote({
       user: id,
-      comment: comment._id,
+      comment: commentId,
       createdDate: new Date(),
       upvote: 1,
       downvote: 0
     })
       .then(result => {
-        var a =1;
+        if (sIndex >= 0) {
+          const copy = comments.slice();
+          copy[tIndex].subComments[sIndex].votes.push(result);
+          setComments(copy);
+        } else {
+          const copy = comments.slice();
+          copy[tIndex].votes.push(result);
+          setComments(copy);
+        }
       })
       .finally(()=>{
 
       });
   };
 
-  const downvoteComment = (comment) => {
+  const downvoteComment = (commentId, tIndex, sIndex) => {
     VoteService.createVote({
       user: id,
-      comment: comment._id,
+      comment: commentId,
       createdDate: new Date(),
       upvote: 0,
       downvote: 1
     })
       .then(result => {
-        var a =1;
+        if (sIndex >= 0) {
+          const copy = comments.slice();
+          copy[tIndex].subComments[sIndex].votes.push(result);
+          setComments(copy);
+        } else {
+          const copy = comments.slice();
+          copy[tIndex].votes.push(result);
+          setComments(copy);
+        }
       })
       .finally(()=>{
 
@@ -218,13 +233,13 @@ export default function CommentList({ blogId }) {
                   </div>
                   <footer className="comment-footer">
                     <p className="buttons">
-                      <button className="button is-info is-inverted" onClick={()=>{upvoteComment(comment)}}>
+                      <button className="button is-info is-inverted" onClick={()=>{upvoteComment(comment._id, tIndex, -1)}}>
                         <span className="icon">
                           <i className="fa-regular fa-thumbs-up"></i>
                         </span>
                         <span className="upvote-count">{comment.votes.filter(v=>v.upvote===1).length}</span>
                       </button>
-                      <button className="button is-info is-inverted" onClick={()=>{downvoteComment(comment)}}>
+                      <button className="button is-info is-inverted" onClick={()=>{downvoteComment(comment._id, tIndex, -1)}}>
                         <span className="icon">
                           <i className="fa-regular fa-thumbs-down"></i>
                         </span>
@@ -277,17 +292,17 @@ export default function CommentList({ blogId }) {
                             </div>
                             <footer className="comment-footer">
                               <p className="buttons">
-                                <button className="button is-info is-inverted">
+                                <button className="button is-info is-inverted" onClick={()=>{upvoteComment(subComment.id, tIndex, sIndex)}}>
                                   <span className="icon">
                                     <i className="fa-regular fa-thumbs-up"></i>
                                   </span>
-                                  <span className="upvote-count">0</span>
+                                  <span className="upvote-count">{subComment.votes.filter(v=>v.upvote===1).length}</span>
                                 </button>
-                                <button className="button is-info is-inverted">
+                                <button className="button is-info is-inverted" onClick={()=>{downvoteComment(subComment._id, tIndex, sIndex)}}>
                                   <span className="icon">
                                     <i className="fa-regular fa-thumbs-down"></i>
                                   </span>
-                                  <span className="downvote-count">0</span>
+                                  <span className="downvote-count">{subComment.votes.filter(v=>v.downvote===1).length}</span>
                                 </button>
                               </p>
                             </footer>
