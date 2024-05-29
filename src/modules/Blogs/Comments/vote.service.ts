@@ -30,11 +30,19 @@ const updateVote = (data) => {
     });
 };
 
+const deleteVote = (id) => {
+  return axios.delete(API_URL + id)
+    .then((response) => {
+      return response.data;
+    });
+};
+
 const VoteService = {
   createVote,
   getVotes,
   getOneCommentById,
   updateVote,
+  deleteVote,
 };
 
 export default VoteService;

@@ -153,6 +153,26 @@ export default function CommentList({ blogId }) {
       });
   };
 
+  const cancelUpvoteComment = (voteId, tIndex, sIndex) => {
+    VoteService.deleteVote(voteId)
+      .then(result => {
+        if (sIndex >= 0) {
+          const copy = comments.slice();
+          const voteIndex = copy[tIndex].subComments[sIndex].votes.findIndex(v => v._id === voteId);
+          copy[tIndex].subComments[sIndex].votes.splice(voteIndex, 1);
+          setComments(copy);
+        } else {
+          const copy = comments.slice();
+          const voteIndex = copy[tIndex].votes.findIndex(v => v._id === voteId);
+          copy[tIndex].votes.splice(voteIndex, 1);
+          setComments(copy);
+        }
+      })
+      .finally(()=>{
+
+      });
+  };
+
   const downvoteComment = (commentId, tIndex, sIndex) => {
     VoteService.createVote({
       user: id,
@@ -175,6 +195,66 @@ export default function CommentList({ blogId }) {
       .finally(()=>{
 
       });
+  };
+
+  const cancelDownvoteComment = (voteId, tIndex, sIndex) => {
+    VoteService.deleteVote(voteId)
+      .then(result => {
+        if (sIndex >= 0) {
+          const copy = comments.slice();
+          const voteIndex = copy[tIndex].subComments[sIndex].votes.findIndex(v => v._id === voteId);
+          copy[tIndex].subComments[sIndex].votes.splice(voteIndex, 1);
+          setComments(copy);
+        } else {
+          const copy = comments.slice();
+          const voteIndex = copy[tIndex].votes.findIndex(v => v._id === voteId);
+          copy[tIndex].votes.splice(voteIndex, 1);
+          setComments(copy);
+        }
+      })
+      .finally(()=>{
+
+      });
+  };
+
+  const clickUpvote = (commentId, tIndex, sIndex) => {
+    // 针对“二级或顶层”评论进行表态
+    const voted = sIndex >= 0 ?
+      comments[tIndex].subComments[sIndex].votes.find(v => v.user === id)
+      : comments[tIndex].votes.includes(v=>v.user === id);
+    if (voted) { // 如果已经表过态
+      if (voted.upvote === 1) { // 如果已经赞过
+        cancelUpvoteComment(voted._id, tIndex, sIndex);
+      } else { // 如果已经踩过
+        // 那就先删掉踩
+        cancelDownvoteComment(voted._id, tIndex, sIndex);
+        // 然后再点赞
+        upvoteComment(commentId, tIndex, sIndex);
+      }
+    } else { // 如果还未表过态
+      // 那就直接点赞
+      upvoteComment(commentId, tIndex, sIndex);
+    }
+  };
+
+  const clickDownvote = (commentId, tIndex, sIndex) => {
+    // 针对“二级或顶层”评论进行表态
+    const voted = sIndex >= 0 ?
+      comments[tIndex].subComments[sIndex].votes.find(v => v.user === id)
+      : comments[tIndex].votes.includes(v=>v.user === id);
+    if (voted) { // 如果已经表过态
+      if (voted.downvote === 1) { // 如果已经踩过
+        cancelDownvoteComment(voted._id, tIndex, sIndex);
+      } else { // 如果已经赞过
+        // 那就先删掉赞
+        cancelUpvoteComment(voted._id, tIndex, sIndex);
+        // 然后再踩
+        downvoteComment(commentId, tIndex, sIndex);
+      }
+    } else { // 如果还未表过态
+      // 那就直接踩
+      downvoteComment(commentId, tIndex, sIndex);
+    }
   };
 
   return (
@@ -233,13 +313,13 @@ export default function CommentList({ blogId }) {
                   </div>
                   <footer className="comment-footer">
                     <p className="buttons">
-                      <button className="button is-info is-inverted" onClick={()=>{upvoteComment(comment._id, tIndex, -1)}}>
+                      <button className="button is-info is-inverted" onClick={()=>{clickUpvote(comment._id, tIndex, -1)}}>
                         <span className="icon">
                           <i className="fa-regular fa-thumbs-up"></i>
                         </span>
                         <span className="upvote-count">{comment.votes.filter(v=>v.upvote===1).length}</span>
                       </button>
-                      <button className="button is-info is-inverted" onClick={()=>{downvoteComment(comment._id, tIndex, -1)}}>
+                      <button className="button is-info is-inverted" onClick={()=>{clickDownvote(comment._id, tIndex, -1)}}>
                         <span className="icon">
                           <i className="fa-regular fa-thumbs-down"></i>
                         </span>
@@ -292,13 +372,13 @@ export default function CommentList({ blogId }) {
                             </div>
                             <footer className="comment-footer">
                               <p className="buttons">
-                                <button className="button is-info is-inverted" onClick={()=>{upvoteComment(subComment.id, tIndex, sIndex)}}>
+                                <button className="button is-info is-inverted" onClick={()=>{clickUpvote(subComment.id, tIndex, sIndex)}}>
                                   <span className="icon">
                                     <i className="fa-regular fa-thumbs-up"></i>
                                   </span>
                                   <span className="upvote-count">{subComment.votes.filter(v=>v.upvote===1).length}</span>
                                 </button>
-                                <button className="button is-info is-inverted" onClick={()=>{downvoteComment(subComment._id, tIndex, sIndex)}}>
+                                <button className="button is-info is-inverted" onClick={()=>{clickDownvote(subComment._id, tIndex, sIndex)}}>
                                   <span className="icon">
                                     <i className="fa-regular fa-thumbs-down"></i>
                                   </span>
