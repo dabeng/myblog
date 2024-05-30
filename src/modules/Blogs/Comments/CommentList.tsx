@@ -154,7 +154,7 @@ export default function CommentList({ blogId }) {
   };
 
   const cancelUpvoteComment = (voteId, tIndex, sIndex) => {
-    VoteService.deleteVote(voteId)
+    return VoteService.deleteVote(voteId)
       .then(result => {
         if (sIndex >= 0) {
           const copy = comments.slice();
@@ -198,7 +198,7 @@ export default function CommentList({ blogId }) {
   };
 
   const cancelDownvoteComment = (voteId, tIndex, sIndex) => {
-    VoteService.deleteVote(voteId)
+    return VoteService.deleteVote(voteId)
       .then(result => {
         if (sIndex >= 0) {
           const copy = comments.slice();
@@ -227,9 +227,11 @@ export default function CommentList({ blogId }) {
         cancelUpvoteComment(voted._id, tIndex, sIndex);
       } else { // 如果已经踩过
         // 那就先删掉踩
-        cancelDownvoteComment(voted._id, tIndex, sIndex);
-        // 然后再点赞
-        upvoteComment(commentId, tIndex, sIndex);
+        cancelDownvoteComment(voted._id, tIndex, sIndex)
+          .then(()=>{
+            // 然后再点赞
+            upvoteComment(commentId, tIndex, sIndex);
+          });
       }
     } else { // 如果还未表过态
       // 那就直接点赞
@@ -247,9 +249,11 @@ export default function CommentList({ blogId }) {
         cancelDownvoteComment(voted._id, tIndex, sIndex);
       } else { // 如果已经赞过
         // 那就先删掉赞
-        cancelUpvoteComment(voted._id, tIndex, sIndex);
-        // 然后再踩
-        downvoteComment(commentId, tIndex, sIndex);
+        cancelUpvoteComment(voted._id, tIndex, sIndex)
+          .then(()=>{
+            // 然后再踩
+            downvoteComment(commentId, tIndex, sIndex);
+          });
       }
     } else { // 如果还未表过态
       // 那就直接踩
@@ -317,13 +321,13 @@ export default function CommentList({ blogId }) {
                         <span className="icon">
                           <i className="fa-regular fa-thumbs-up"></i>
                         </span>
-                        <span className="upvote-count">{comment.votes.filter(v=>v.upvote===1).length}</span>
+                        <span className="upvote-count">{comment.votes?.filter(v=>v.upvote===1).length}</span>
                       </button>
                       <button className="button is-info is-inverted" onClick={()=>{clickDownvote(comment._id, tIndex, -1)}}>
                         <span className="icon">
                           <i className="fa-regular fa-thumbs-down"></i>
                         </span>
-                        <span className="downvote-count">{comment.votes.filter(v=>v.downvote===1).length}</span>
+                        <span className="downvote-count">{comment.votes?.filter(v=>v.downvote===1).length}</span>
                       </button>
                     </p>
                   </footer>
@@ -376,13 +380,13 @@ export default function CommentList({ blogId }) {
                                   <span className="icon">
                                     <i className="fa-regular fa-thumbs-up"></i>
                                   </span>
-                                  <span className="upvote-count">{subComment.votes.filter(v=>v.upvote===1).length}</span>
+                                  <span className="upvote-count">{(!subComment.votes || subComment.votes.length === 0) ? 0 : subComment.votes.filter(v=>v.upvote===1).length}</span>
                                 </button>
                                 <button className="button is-info is-inverted" onClick={()=>{clickDownvote(subComment._id, tIndex, sIndex)}}>
                                   <span className="icon">
                                     <i className="fa-regular fa-thumbs-down"></i>
                                   </span>
-                                  <span className="downvote-count">{subComment.votes.filter(v=>v.downvote===1).length}</span>
+                                  <span className="downvote-count">{(!subComment.votes || subComment.votes.length === 0) ? 0 : subComment.votes.filter(v=>v.downvote===1).length}</span>
                                 </button>
                               </p>
                             </footer>
