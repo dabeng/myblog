@@ -12,6 +12,12 @@ import './CommentList.css';
 export default function CommentList({ blogId }) {
   const { accessToken, id, name, username, email, roles, clearAuth } = useAuth();
 
+
+  const onAddToplevelComment = (data) => {
+    setComments(cmts => [...cmts, data]);
+    setCommentCollapsed(cc => [...cc, [false]]);
+  };
+
   const onAddSecondlevelComment = (data) => {
     setComments(comments.map(c => {
       if (c._id === data.parentCommentId) {
@@ -100,7 +106,14 @@ export default function CommentList({ blogId }) {
       }
     }));
   };
-
+  /* 我们用一个二维数组来保存所有评论的“打开/折叠”状态
+  let commentCollapsed = [
+    [false, [true, false, false]],
+    [false, [false, true, false]],
+    [false, [false, false, true]],
+    . . .
+  ];
+  */
   const [commentCollapsed, setCommentCollapsed] = useState([]);
   const toggleToplevelCommentCollapsed = function (index) {
     setCommentCollapsed(commentCollapsed.map((tc, i) => {
@@ -263,6 +276,7 @@ export default function CommentList({ blogId }) {
 
   return (
     <div>
+      <CommentBox blogId={blogId} addToplevelComment={onAddToplevelComment} />
       <p className="title is-6 pt-6" style={{ marginBottom: "-2rem" }}>{commentTotal} Comments</p>
       <div className="tabs is-right">
         <ul>

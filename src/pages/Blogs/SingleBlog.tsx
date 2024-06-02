@@ -1,6 +1,5 @@
 import { BlogArticle } from '../../modules/blogs';
 import {
-  CommentBox,
   CommentList,
   Reactions,
 } from '../../modules/blogs/Comments';
@@ -15,7 +14,6 @@ export default function SingleBlog() {
       <div className="box">
         <p className="title is-2">Comments</p>
         <Reactions />
-        <CommentBox blogId={blog._id} />
         <CommentList blogId={blog._id} />
       </div>
     </>

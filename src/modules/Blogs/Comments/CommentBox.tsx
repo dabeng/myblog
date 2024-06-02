@@ -16,7 +16,7 @@ import CommentService from "./comment.service";
 import { useBoundStore } from '../../../shared/stores/useBoundStore';
 import { useAuth } from "../../auth";
 
-export default function CommentBox({blogId, parentCommentId = null, addSecondlevelComment = null}) {
+export default function CommentBox({blogId, parentCommentId = null, addToplevelComment = null, addSecondlevelComment = null}) {
   const { accessToken, id, name, username, email, roles, clearAuth } = useAuth();
 
   const showNotification = useBoundStore((state) => state.showNotification);
@@ -71,6 +71,8 @@ export default function App() {
       .then(result => {
         if (parentCommentId) {
           addSecondlevelComment(result);
+        } else {
+          addToplevelComment(result);
         }
       })
       .finally(()=>{
