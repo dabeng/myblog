@@ -161,7 +161,7 @@ export default function CommentList({ blogId }) {
           setComments(copy);
         }
       })
-      .finally(()=>{
+      .finally(() => {
 
       });
   };
@@ -181,7 +181,7 @@ export default function CommentList({ blogId }) {
           setComments(copy);
         }
       })
-      .finally(()=>{
+      .finally(() => {
 
       });
   };
@@ -205,7 +205,7 @@ export default function CommentList({ blogId }) {
           setComments(copy);
         }
       })
-      .finally(()=>{
+      .finally(() => {
 
       });
   };
@@ -225,7 +225,7 @@ export default function CommentList({ blogId }) {
           setComments(copy);
         }
       })
-      .finally(()=>{
+      .finally(() => {
 
       });
   };
@@ -234,14 +234,14 @@ export default function CommentList({ blogId }) {
     // 针对“二级或顶层”评论进行表态
     const voted = sIndex >= 0 ?
       comments[tIndex].subComments[sIndex].votes.find(v => v.user === id)
-      : comments[tIndex].votes.includes(v=>v.user === id);
+      : comments[tIndex].votes.includes(v => v.user === id);
     if (voted) { // 如果已经表过态
       if (voted.upvote === 1) { // 如果已经赞过
         cancelUpvoteComment(voted._id, tIndex, sIndex);
       } else { // 如果已经踩过
         // 那就先删掉踩
         cancelDownvoteComment(voted._id, tIndex, sIndex)
-          .then(()=>{
+          .then(() => {
             // 然后再点赞
             upvoteComment(commentId, tIndex, sIndex);
           });
@@ -256,14 +256,14 @@ export default function CommentList({ blogId }) {
     // 针对“二级或顶层”评论进行表态
     const voted = sIndex >= 0 ?
       comments[tIndex].subComments[sIndex].votes.find(v => v.user === id)
-      : comments[tIndex].votes.includes(v=>v.user === id);
+      : comments[tIndex].votes.includes(v => v.user === id);
     if (voted) { // 如果已经表过态
       if (voted.downvote === 1) { // 如果已经踩过
         cancelDownvoteComment(voted._id, tIndex, sIndex);
       } else { // 如果已经赞过
         // 那就先删掉赞
         cancelUpvoteComment(voted._id, tIndex, sIndex)
-          .then(()=>{
+          .then(() => {
             // 然后再踩
             downvoteComment(commentId, tIndex, sIndex);
           });
@@ -331,17 +331,17 @@ export default function CommentList({ blogId }) {
                   </div>
                   <footer className="comment-footer">
                     <p className="buttons">
-                      <button className="button is-info is-inverted" onClick={()=>{clickUpvote(comment._id, tIndex, -1)}}>
+                      <button className="button is-info is-inverted" onClick={() => { clickUpvote(comment._id, tIndex, -1) }}>
                         <span className="icon">
                           <i className="fa-regular fa-thumbs-up"></i>
                         </span>
-                        <span className="upvote-count">{comment.votes?.filter(v=>v.upvote===1).length}</span>
+                        <span className="upvote-count">{comment.votes?.filter(v => v.upvote === 1).length}</span>
                       </button>
-                      <button className="button is-info is-inverted" onClick={()=>{clickDownvote(comment._id, tIndex, -1)}}>
+                      <button className="button is-info is-inverted" onClick={() => { clickDownvote(comment._id, tIndex, -1) }}>
                         <span className="icon">
                           <i className="fa-regular fa-thumbs-down"></i>
                         </span>
-                        <span className="downvote-count">{comment.votes?.filter(v=>v.downvote===1).length}</span>
+                        <span className="downvote-count">{comment.votes?.filter(v => v.downvote === 1).length}</span>
                       </button>
                     </p>
                   </footer>
@@ -389,20 +389,42 @@ export default function CommentList({ blogId }) {
                               <Markdown remarkPlugins={[remarkGfm]}>{subComment.content}</Markdown>
                             </div>
                             <footer className="comment-footer">
-                              <p className="buttons">
-                                <button className="button is-info is-inverted" onClick={()=>{clickUpvote(subComment.id, tIndex, sIndex)}}>
-                                  <span className="icon">
-                                    <i className="fa-regular fa-thumbs-up"></i>
-                                  </span>
-                                  <span className="upvote-count">{(!subComment.votes || subComment.votes.length === 0) ? 0 : subComment.votes.filter(v=>v.upvote===1).length}</span>
-                                </button>
-                                <button className="button is-info is-inverted" onClick={()=>{clickDownvote(subComment._id, tIndex, sIndex)}}>
-                                  <span className="icon">
-                                    <i className="fa-regular fa-thumbs-down"></i>
-                                  </span>
-                                  <span className="downvote-count">{(!subComment.votes || subComment.votes.length === 0) ? 0 : subComment.votes.filter(v=>v.downvote===1).length}</span>
-                                </button>
-                              </p>
+                              <div className="buttons">
+                                <div className="dropdown is-hoverable is-up">
+                                  <div className="dropdown-trigger">
+                                    <button aria-haspopup="true" className="button is-info is-inverted" onClick={() => { clickUpvote(subComment.id, tIndex, sIndex) }}>
+                                      <span className="icon">
+                                        <i className="fa-regular fa-thumbs-up"></i>
+                                      </span>
+                                      <span className="upvote-count">{(!subComment.votes || subComment.votes.length === 0) ? 0 : subComment.votes.filter(v => v.upvote === 1).length}</span>
+                                    </button>
+                                  </div>
+                                  <div className="dropdown-menu" role="menu">
+                                    <div className="dropdown-content">
+                                      {subComment?.votes.map((v) => (
+                                        <a key={v._id} href="#" className="dropdown-item">{v.user.username}</a>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                                <div className="dropdown is-hoverable is-up">
+                                  <div className="dropdown-trigger">
+                                    <button className="button is-info is-inverted" onClick={() => { clickDownvote(subComment._id, tIndex, sIndex) }}>
+                                      <span className="icon">
+                                        <i className="fa-regular fa-thumbs-down"></i>
+                                      </span>
+                                      <span className="downvote-count">{(!subComment.votes || subComment.votes.length === 0) ? 0 : subComment.votes.filter(v => v.downvote === 1).length}</span>
+                                    </button>
+                                  </div>
+                                  <div className="dropdown-menu" role="menu">
+                                    <div className="dropdown-content">
+                                      {subComment?.votes.map((v) => (
+                                        <a key={v._id} href="#" className="dropdown-item">{v.user.username}</a>
+                                      ))}
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
                             </footer>
                           </>
                         }
