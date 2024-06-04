@@ -330,20 +330,46 @@ export default function CommentList({ blogId }) {
                     <Markdown remarkPlugins={[remarkGfm]}>{comment.content}</Markdown>
                   </div>
                   <footer className="comment-footer">
-                    <p className="buttons">
-                      <button className="button is-info is-inverted" onClick={() => { clickUpvote(comment._id, tIndex, -1) }}>
-                        <span className="icon">
-                          <i className="fa-regular fa-thumbs-up"></i>
-                        </span>
-                        <span className="upvote-count">{comment.votes?.filter(v => v.upvote === 1).length}</span>
-                      </button>
-                      <button className="button is-info is-inverted" onClick={() => { clickDownvote(comment._id, tIndex, -1) }}>
-                        <span className="icon">
-                          <i className="fa-regular fa-thumbs-down"></i>
-                        </span>
-                        <span className="downvote-count">{comment.votes?.filter(v => v.downvote === 1).length}</span>
-                      </button>
-                    </p>
+                    <div className="buttons">
+                      <div className="dropdown is-hoverable is-up">
+                        <div className="dropdown-trigger">
+                          <button aria-haspopup="true" className="button is-info is-inverted" onClick={() => { clickUpvote(comment._id, tIndex, -1) }}>
+                            <span className="icon">
+                              <i className="fa-regular fa-thumbs-up"></i>
+                            </span>
+                            <span className="upvote-count">{(!comment.votes || comment.votes.length === 0) ? 0 : comment.votes.filter(v => v.upvote === 1).length}</span>
+                          </button>
+                        </div>
+                        {comment?.votes.filter(v => v.upvote === 1).length > 0 &&
+                          <div className="dropdown-menu" role="menu">
+                            <div className="dropdown-content">
+                              {comment?.votes.filter(v => v.upvote === 1).map((v) => (
+                                <a key={v._id} href="#" className="dropdown-item">{v.user.username}</a>
+                              ))}
+                            </div>
+                          </div>
+                        }
+                      </div>
+                      <div className="dropdown is-hoverable is-up">
+                        <div className="dropdown-trigger">
+                          <button aria-haspopup="true" className="button is-info is-inverted" onClick={() => { clickDownvote(comment._id, tIndex, -1) }}>
+                            <span className="icon">
+                              <i className="fa-regular fa-thumbs-down"></i>
+                            </span>
+                            <span className="downvote-count">{(!comment.votes || comment.votes.length === 0) ? 0 : comment.votes.filter(v => v.downvote === 1).length}</span>
+                          </button>
+                        </div>
+                        {comment?.votes.filter(v => v.downvote === 1).length > 0 &&
+                          <div className="dropdown-menu" role="menu">
+                            <div className="dropdown-content">
+                              {comment?.votes.filter(v => v.downvote === 1).map((v) => (
+                                <a key={v._id} href="#" className="dropdown-item">{v.user.username}</a>
+                              ))}
+                            </div>
+                          </div>
+                        }
+                      </div>
+                    </div>
                   </footer>
                 </>
               }
@@ -399,13 +425,15 @@ export default function CommentList({ blogId }) {
                                       <span className="upvote-count">{(!subComment.votes || subComment.votes.length === 0) ? 0 : subComment.votes.filter(v => v.upvote === 1).length}</span>
                                     </button>
                                   </div>
-                                  <div className="dropdown-menu" role="menu">
-                                    <div className="dropdown-content">
-                                      {subComment?.votes.map((v) => (
-                                        <a key={v._id} href="#" className="dropdown-item">{v.user.username}</a>
-                                      ))}
+                                  {subComment?.votes.filter(v => v.upvote === 1).length > 0 &&
+                                    <div className="dropdown-menu" role="menu">
+                                      <div className="dropdown-content">
+                                        {subComment?.votes.filter(v => v.upvote === 1).map((v) => (
+                                          <a key={v._id} href="#" className="dropdown-item">{v.user.username}</a>
+                                        ))}
+                                      </div>
                                     </div>
-                                  </div>
+                                  }
                                 </div>
                                 <div className="dropdown is-hoverable is-up">
                                   <div className="dropdown-trigger">
@@ -416,13 +444,15 @@ export default function CommentList({ blogId }) {
                                       <span className="downvote-count">{(!subComment.votes || subComment.votes.length === 0) ? 0 : subComment.votes.filter(v => v.downvote === 1).length}</span>
                                     </button>
                                   </div>
-                                  <div className="dropdown-menu" role="menu">
-                                    <div className="dropdown-content">
-                                      {subComment?.votes.map((v) => (
-                                        <a key={v._id} href="#" className="dropdown-item">{v.user.username}</a>
-                                      ))}
+                                  {subComment?.votes.filter(v => v.downvote === 1).length > 0 &&
+                                    <div className="dropdown-menu" role="menu">
+                                      <div className="dropdown-content">
+                                        {subComment?.votes.filter(v => v.downvote === 1).map((v) => (
+                                          <a key={v._id} href="#" className="dropdown-item">{v.user.username}</a>
+                                        ))}
+                                      </div>
                                     </div>
-                                  </div>
+                                  }
                                 </div>
                               </div>
                             </footer>
