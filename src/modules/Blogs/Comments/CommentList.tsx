@@ -233,8 +233,8 @@ export default function CommentList({ blogId }) {
   const clickUpvote = (commentId, tIndex, sIndex) => {
     // 针对“二级或顶层”评论进行表态
     const voted = sIndex >= 0 ?
-      comments[tIndex].subComments[sIndex].votes.find(v => v.user === id)
-      : comments[tIndex].votes.includes(v => v.user === id);
+      comments[tIndex].subComments[sIndex].votes.find(v => v.user === id || v.user._id === id)
+      : comments[tIndex].votes.includes(v => v.user === id || v.user._id === id);
     if (voted) { // 如果已经表过态
       if (voted.upvote === 1) { // 如果已经赞过
         cancelUpvoteComment(voted._id, tIndex, sIndex);
@@ -255,8 +255,8 @@ export default function CommentList({ blogId }) {
   const clickDownvote = (commentId, tIndex, sIndex) => {
     // 针对“二级或顶层”评论进行表态
     const voted = sIndex >= 0 ?
-      comments[tIndex].subComments[sIndex].votes.find(v => v.user === id)
-      : comments[tIndex].votes.includes(v => v.user === id);
+      comments[tIndex].subComments[sIndex].votes.find(v => v.user === id || v.user._id === id)
+      : comments[tIndex].votes.includes(v => v.user === id || v.user._id === id);
     if (voted) { // 如果已经表过态
       if (voted.downvote === 1) { // 如果已经踩过
         cancelDownvoteComment(voted._id, tIndex, sIndex);
@@ -344,7 +344,7 @@ export default function CommentList({ blogId }) {
                           <div className="dropdown-menu" role="menu">
                             <div className="dropdown-content">
                               {comment?.votes.filter(v => v.upvote === 1).map((v) => (
-                                <a key={v._id} href="#" className="dropdown-item">{v.user.username}</a>
+                                <a key={v._id} href="#" className="dropdown-item">{v.username ? v.username : v.user.username}</a>
                               ))}
                             </div>
                           </div>
@@ -363,7 +363,7 @@ export default function CommentList({ blogId }) {
                           <div className="dropdown-menu" role="menu">
                             <div className="dropdown-content">
                               {comment?.votes.filter(v => v.downvote === 1).map((v) => (
-                                <a key={v._id} href="#" className="dropdown-item">{v.user.username}</a>
+                                <a key={v._id} href="#" className="dropdown-item">{v.username ? v.username : v.user.username}</a>
                               ))}
                             </div>
                           </div>
@@ -429,7 +429,7 @@ export default function CommentList({ blogId }) {
                                     <div className="dropdown-menu" role="menu">
                                       <div className="dropdown-content">
                                         {subComment?.votes.filter(v => v.upvote === 1).map((v) => (
-                                          <a key={v._id} href="#" className="dropdown-item">{v.user.username}</a>
+                                          <a key={v._id} href="#" className="dropdown-item">{v.username ? v.username : v.user.username}</a>
                                         ))}
                                       </div>
                                     </div>
@@ -448,7 +448,7 @@ export default function CommentList({ blogId }) {
                                     <div className="dropdown-menu" role="menu">
                                       <div className="dropdown-content">
                                         {subComment?.votes.filter(v => v.downvote === 1).map((v) => (
-                                          <a key={v._id} href="#" className="dropdown-item">{v.user.username}</a>
+                                          <a key={v._id} href="#" className="dropdown-item">{v.username ? v.username : v.user.username}</a>
                                         ))}
                                       </div>
                                     </div>
