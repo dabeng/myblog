@@ -14,7 +14,7 @@ export default function CommentList({ blogId }) {
 
 
   const onAddToplevelComment = (data) => {
-    setComments(cmts => [...cmts, data]);
+    setComments(cmts => [...cmts, {...data, votes: []}]);
     setCommentCollapsed(cc => [...cc, [false]]);
   };
 
@@ -337,7 +337,7 @@ export default function CommentList({ blogId }) {
                             <span className="icon">
                               <i className="fa-regular fa-thumbs-up"></i>
                             </span>
-                            <span className="upvote-count">{(!comment.votes || comment.votes.length === 0) ? 0 : comment.votes.filter(v => v.upvote === 1).length}</span>
+                            <span className="upvote-count">{(!comment.votes || comment.votes.length === 0) ? 0 : comment.votes?.filter(v => v.upvote === 1).length}</span>
                           </button>
                         </div>
                         {comment?.votes.filter(v => v.upvote === 1).length > 0 &&
